@@ -1,0 +1,11 @@
+/* menu on left */
+#menu_wrap{
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 100;
+    display: none;
+}
+#open_menu, #close_menu{
+    cursor: pointer;
+}

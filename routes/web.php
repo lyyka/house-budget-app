@@ -11,6 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// index page
+Route::get('/', 'PagesController@index')->name('pages.index');
+
+// auth
+Auth::routes(['verify' => true]);
+
+// dashboard index
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+// users
+Route::resource('users', 'UsersController', [
+    'only' => ['edit', 'update', 'destroy']
+]);
+
+// households
+Route::resource('households', 'HouseholdsController');

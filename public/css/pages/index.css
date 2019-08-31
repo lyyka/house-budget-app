@@ -1,0 +1,7 @@
+#main_ribbon{
+    height: 75vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('/storage/images/money.jpg');
+}
