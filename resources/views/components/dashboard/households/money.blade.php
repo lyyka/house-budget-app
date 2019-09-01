@@ -1,7 +1,7 @@
 <div class="rounded shadow-sm border p-4">
     <h3>Balance</h3>
     <hr />
-    <p class="h1 {{ $household->current_state <=  $household->expected_monthly_savings ? "text-danger" : "text-success"}}">
+    <p class="h1 {{ $household->current_state <=  $household->expected_monthly_savings || $household->current_state <= 0 ? "text-danger" : "text-success"}}">
         @money($household->current_state * 100, $household->currency->currency_short)
     </p>
     <hr />

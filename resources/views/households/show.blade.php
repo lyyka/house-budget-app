@@ -8,12 +8,21 @@
     <div class="container">
         <h1 class="text-center mb-5">{{ $household->name }}</h1>
 
+        @include('components.dashboard.households.add_expense')
+        @include('components.dashboard.households.add_member')
+
         <div class="row">
             <div class="col-lg-6 mb-3">
                 @include('components.dashboard.households.money')
             </div>
             <div class="col-lg-6 mb-3">
-                @include('components.dashboard.households.add_expense')
+                @include('components.dashboard.households.expenses_list')
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                @include('components.dashboard.households.members_list')
             </div>
         </div>
     </div>

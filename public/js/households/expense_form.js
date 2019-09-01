@@ -13,7 +13,9 @@ function toggleCategoriesDropdown(e){
 }
 
 function categoriesDropdownItemSelected(e){
-    const value = $(this).find('.category_name').text();
+    const value = $(this).find('.category_id').text();
+    console.log(value);
+    
     $("#category").val(value);
     $("#categories_dropdown_text").html($(this).html());
 }

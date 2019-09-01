@@ -16,13 +16,13 @@
                     <label for="email" class="d-block">Email:</label>
                     <input id="email" type="email" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter your email address" />
                     @error('email')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
         
                     <label for="password" class="d-block">Password:</label>
                     <input id="password" type="password" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Enter your password here" />
                     @error('password')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
         
                     {{-- <hr /> --}}

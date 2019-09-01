@@ -11,7 +11,7 @@
                     <label for="name" class="d-block">Name a household:</label>
                     <input id="name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus placeholder="Use a name to recognize this household" />
                     @error('name')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
                 <div class="col-lg-6">
@@ -22,7 +22,7 @@
                         @endforeach
                     </select>
                     @error('currency')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
             </div>
@@ -31,14 +31,14 @@
                     <label for="monthly_income" class="d-block">Monthly Income:</label>
                     <input id="monthly_income" type="number" min="100" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('monthly_income') is-invalid @enderror" name="monthly_income" value="{{ old('monthly_income') }}" required placeholder="Income" />
                     @error('monthly_income')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
                 <div class="col-lg-6">
                     <label for="expected_monthly_savings" class="d-block">Expected Monthly Savings:</label>
                     <input id="expected_monthly_savings" min="100" type="number" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('expected_monthly_savings') is-invalid @enderror" name="expected_monthly_savings" value="{{ old('expected_monthly_savings') }}" required placeholder="How much do you expect to save?" />
                     @error('expected_monthly_savings')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
             </div>
@@ -48,14 +48,14 @@
                     <input id="current_state" type="number" class="w-100 rounded shadow-sm border py-2 px-3 @error('current_state') is-invalid @enderror" name="current_state" value="{{ old('current_state') }}" placeholder="How much do you expect to save?" />
                     <label class = "text-muted">Defaults to monthly income</label>
                     @error('current_state')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
                 <div class="col-lg-6">
                     <label for="budget_reset_day" class="d-block">When is the budget reset?</label>
                     <input id="budget_reset_day" type="number" min="1" max="31" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" name="budget_reset_day" value="{{ old('budget_reset_day') }}" required placeholder="How much do you expect to save?" />
                     @error('budget_reset_day')
-                        <label class = "d-block text-danger">{{ $error }}</label>
+                        <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                 </div>
             </div>
