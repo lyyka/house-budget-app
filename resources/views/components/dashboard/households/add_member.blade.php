@@ -11,49 +11,33 @@
                 <div class="modal-body">
                     @csrf
                     <input type="hidden" name="household_id" value = {{ $household->id }} />
-                    <label for="name" class="d-block">Expense title:</label>
-                    <input id="name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required autofocus placeholder="Describe the expense" value = "{{ old('name') }}" />
-                    @error('name')
-                        <label class = "d-block text-danger">{{ $message }}</label>
-                    @enderror
-            
-                    <label for="amount" class="d-block">Amount:</label>
-                    <input id="amount" type="number" min="1" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required autofocus placeholder="How much did you spend?" value = "{{ old('amount') }}" />
-                    @error('amount')
-                        <label class = "d-block text-danger">{{ $message }}</label>
-                    @enderror
-            
-                    <label for="category" class="d-block">Category:</label>
-                    <input type="hidden" name="category_id" id="category" />
-                    <div class="position-relative">
-                        <div class="w-100 mb-4 rounded shadow-sm border py-2 px-3" id="open_categories_dropdown">
-                            <div id="categories_dropdown_text" class="d-inline-block">
-                                Select expense category
-                            </div>
-                            <p class="text-right mb-0 float-right">
-                                <i class="fas fa-chevron-circle-down"></i>
-                            </p>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="first_name" class="d-block">First Name:</label>
+                            <input id="first_name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('first_name') is-invalid @enderror" name="first_name" required autofocus placeholder="First Name" value = "{{ old('first_name') }}" />
+                            @error('first_name')
+                                <label class = "d-block text-danger">{{ $message }}</label>
+                            @enderror
                         </div>
-                        <div class="position-absolute w-100 bg-white border shadow-sm p-3" id="categories_dropdown">
-                            @foreach ($expense_categories as $cat)
-                                <div class="mb-3 category_item">
-                                    <div class="category_color_circle rounded-circle d-inline-block" style="background-color: #{{ $cat->hex_color }}"></div>
-                                    <p class="mb-0 d-inline-block">{{ $cat->name }}</p>
-                                    <p class="mb-0 d-none category_id">{{ $cat->id }}</p>
-                                </div>
-                            @endforeach
+                        <div class="col-lg-6">
+                            <label for="last_name" class="d-block">Last Name:</label>
+                            <input id="last_name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('last_name') is-invalid @enderror" name="last_name" required autofocus placeholder="Last Name" value = "{{ old('last_name') }}" />
+                            @error('last_name')
+                                <label class = "d-block text-danger">{{ $message }}</label>
+                            @enderror
                         </div>
                     </div>
-                    @error('category_id')
+            
+                    <label for="additional_income" class="d-block">Additional Income:</label>
+                    <input id="additional_income" type="number" min="1" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" required autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
+                    @error('additional_income')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
-            
-                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="px-3 py-1 bg-secondary text-white rounded shadow-sm border" data-dismiss="modal">Close</button>
                     <button type = "submit" class="px-3 py-1 bg-info text-white rounded shadow-sm border">
-                        Add Expense
+                        Add a Member
                     </button>
                 </div>
             </form>

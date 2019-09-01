@@ -191,10 +191,10 @@ class HouseholdsController extends Controller
         $household = Household::findOrFail($id);
         if($household != null && $household->user_id == Auth::id()){
             // get all expenses
-            $expenses = $household->expenses()->paginate(10);
+            $expenses = $household->expenses()->orderBy('expense_made_at', 'desc')->paginate(10);
 
             // get all members
-            $members = $household->members()->paginate(5);
+            $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
 
             // generate monthly income base on monthly income from household + any other members that have additional income
             $members = $household->members;

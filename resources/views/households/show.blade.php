@@ -12,16 +12,16 @@
         @include('components.dashboard.households.add_member')
 
         <div class="row">
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.money')
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.expenses_list')
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.members_list')
             </div>
         </div>

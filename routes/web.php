@@ -33,4 +33,9 @@ Route::get('/households/{id}/today_data', 'HouseholdsController@getTodaysData')-
 // expenses
 Route::resource('expenses', 'ExpensesController', [
     'only' => ['store', 'show', 'destroy']
- ]);
+]);
+
+// members
+Route::resource('members', 'MembersController', [
+    'only' => ['store', 'edit', 'update', 'destroy']
+]);

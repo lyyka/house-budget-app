@@ -11,14 +11,27 @@
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Income</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($members as $member)
                         <tr>
-                            <th scope="row">{{ $member->first_name }}</th>
+                            <td>{{ $member->first_name }}</td>
                             <td>
                                 @money($member->additional_income * 100, $household->currency->currency_short)
+                            </td>
+                            <td>
+                                <a href="/members/{{ $member->id }}/edit" class="text-info">
+                                    Edit
+                                </a>
+                                <form method="POST" action="/members/{{ $member->id }}">
+                                    @csrf
+                                    @method("DELETE")
+                                    <button type="submit" class="border-0 text-danger p-0 bg-transparent">
+                                        Remove
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
