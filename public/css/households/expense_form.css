@@ -1,0 +1,14 @@
+#categories_dropdown{
+    top: 40px;
+    left: 0;
+    height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+.category_color_circle{
+    width: 20px;
+    height: 20px;;
+}
+.category_item{
+    cursor: pointer;
+}

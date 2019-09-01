@@ -29,3 +29,8 @@ Route::resource('users', 'UsersController', [
 Route::resource('households', 'HouseholdsController');
 Route::get('/households/{id}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');
 Route::get('/households/{id}/today_data', 'HouseholdsController@getTodaysData')->name('household.today');
+
+// expenses
+Route::resource('expenses', 'ExpensesController', [
+    'only' => ['store', 'show', 'destroy']
+ ]);

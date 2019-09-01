@@ -188,7 +188,34 @@ class HouseholdsController extends Controller
      */
     public function show($id)
     {
-        //
+        $household = Household::findOrFail($id);
+        if($household != null && $household->user_id == Auth::id()){
+            // get all expenses
+            $expenses = $household->expenses;
+
+            // generate monthly income base on monthly income from household + any other members that have additional income
+            $members = $household->members;
+            $monthly_income = $household->monthly_income;
+            foreach($members as $member){
+                $monthly_income += $member->additional_income;
+            }
+
+            // get categories for expense form
+            $categories = \App\ExpenseCategory::all();
+
+            $data = [
+                'household' => $household,
+                'expenses' => $expenses,
+                'monthly_income' => $monthly_income,
+                'expense_categories' => $categories
+            ];
+
+            return view('households.show')->with($data);
+        }
+        else{
+            toastr()->error('This is not your household');
+            return redirect('/households');
+        }
     }
 
     /**

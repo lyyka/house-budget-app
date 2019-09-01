@@ -6,7 +6,8 @@
             No households data
         </p>
     @else
-        <select id="today_households_dropdown" class="py-1 px-3 rounded shadow-sm border">
+        <label for="monthly_households_dropdown">Household:</label>
+        <select id="today_households_dropdown" class="pr-2 border rounded">
             @foreach ($households as $household)
                 <option value="{{ $household->id }}">{{ $household->name }}</option>
             @endforeach
