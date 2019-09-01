@@ -7,6 +7,10 @@ function docReady(e){
 
 function monthlyDropdownChange(){
     const household_id = $("#monthly_households_dropdown").val();
+    fetchMonthlyData(household_id);
+}
+
+function fetchMonthlyData(household_id){
     if(household_id > 0){
         const req = $.ajax({
             type: "GET",
@@ -16,12 +20,18 @@ function monthlyDropdownChange(){
         });
 
         req.done(function(data){
-            console.log(data);
+            const response = data.expenses;
+            const labels = [];
+            const values = [];
+            response.forEach(expense => {
+                labels.push(numberToMonthString(expense.month));
+                values.push(expense.total);
+            });
             
             if(data.success){
                 const ajax_data = {
-                    labels: data.labels,
-                    values: data.values
+                    labels: labels,
+                    values: values
                 };
                 initMonthlyChart(ajax_data);
             }
@@ -29,9 +39,14 @@ function monthlyDropdownChange(){
     }
 }
 
+function numberToMonthString(number){
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    return months[number - 1];
+}
+
 function initMonthlyChart(ajax_data){
     // init this month chart
-    const ctx = document.getElementById('current_month_chart').getContext('2d');
+    const ctx = document.getElementById('this_year_chart').getContext('2d');
     var chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
@@ -41,7 +56,8 @@ function initMonthlyChart(ajax_data){
             labels: ajax_data.labels,
             datasets: [{
                 label: 'Money spent by month',
-                backgroundColor: 'rgb(255, 99, 132)',
+                fill: false,
+                // backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(235,79,112)',
                 data: ajax_data.values
             }]

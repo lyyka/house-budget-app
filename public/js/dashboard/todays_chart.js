@@ -7,6 +7,10 @@ function docReady(e){
 
 function todayDropdownChange(){
     const household_id = $("#today_households_dropdown").val();
+    fetchTodaysData(household_id);
+}
+
+function fetchTodaysData(household_id){
     if(household_id > 0){
         const req = $.ajax({
             type: "GET",
@@ -16,10 +20,18 @@ function todayDropdownChange(){
         });
 
         req.done(function(data){
+            const response = data.expenses;
+            const labels = [];
+            const values = [];
+            response.forEach(expense => {
+                labels.push(expense.hour);
+                values.push(expense.total);
+            });
+            
             if(data.success){
                 const ajax_data = {
-                    labels: data.labels,
-                    values: data.values
+                    labels: labels,
+                    values: values
                 };
                 initTodayChart(ajax_data);
             }
@@ -39,7 +51,8 @@ function initTodayChart(ajax_data){
             labels: ajax_data.labels,
             datasets: [{
                 label: 'Money spent by hour',
-                backgroundColor: 'rgb(99, 255, 169)',
+                fill: false,
+                // backgroundColor: 'rgb(99, 255, 169)',
                 borderColor: 'rgb(79, 235, 149)',
                 data: ajax_data.values
             }]

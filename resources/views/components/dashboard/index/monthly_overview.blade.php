@@ -12,6 +12,6 @@
                 <option value="{{ $household->id }}">{{ $household->name }}</option>
             @endforeach
         </select>
-        <canvas class="d-block" id="current_month_chart"></canvas>
+        <canvas class="d-block" id="this_year_chart"></canvas>
     @endif
 </div>

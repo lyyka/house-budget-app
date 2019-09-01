@@ -33,6 +33,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $households->links() }}
         @else
             <p class="text-center text-muted">
                 No households, add some.

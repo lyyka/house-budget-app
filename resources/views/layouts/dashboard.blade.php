@@ -42,7 +42,9 @@
         @include('components.dashboard.menu')
 
         {{-- View's content --}}
-        @yield('content')
+        <div style="padding-top: 100px;">
+            @yield('content')
+        </div>
 
 
 

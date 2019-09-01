@@ -16,13 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $total_expenses = 0;
-                @endphp
                 @foreach ($expenses as $expense)
-                    @php
-                        $total_expenses += $expense->amount;
-                    @endphp
                     <tr>
                         <th scope="row">{{ $expense->name }}</th>
                         <td>
@@ -37,6 +31,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $expenses->links() }}
         <hr />
         <p>
             <strong>Total: </strong> @money($total_expenses * 100, $household->currency->currency_short)

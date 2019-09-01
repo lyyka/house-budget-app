@@ -23,39 +23,12 @@ class HouseholdsController extends Controller
     public function getTodaysData(Request $request, $id){
         $household = Household::findOrFail($id);
         if($household != null){
-            // get monthly data
-            $expenses = $household->expenses()
-            ->whereDay('expense_made_at', '=', date('d'))
-            ->whereMonth('expense_made_at', '=', date('m'))
-            ->orderBy('expense_made_at', 'asc')->get();
 
-            $amounts = array();
-            $hours = array();
-            $last_hour = null;
-            $current_hour_amount = 0;
-            foreach ($expenses as $expense) {
-                $timestamp = strtotime($expense->expense_made_at);
-                $hour = date('H', $timestamp);
-                if($last_hour == null){
-                    $current_hour_amount += $expense->amount;
-                }
-                elseif($last_hour == $hour){
-                    $current_hour_amount += $expense->amount;
-                }
-                if($last_hour != null && $last_hour != $hour){
-                    array_push($hours, $last_hour);
-                    array_push($amounts, $current_hour_amount);
-                    $current_hour_amount = $expense->amount;
-                }
-                $last_hour = $hour;
-            }
-            array_push($hours, $last_hour);
-            array_push($amounts, $current_hour_amount);
+            $expenses = $household->fetchDayExpenses(date('d'), date('m'), date('Y'));
 
             return response()->json([
                 'success' => true,
-                'values' => $amounts,
-                'labels' => $hours,
+                'expenses' => $expenses
             ]);
         }
         else{
@@ -73,36 +46,12 @@ class HouseholdsController extends Controller
     public function getMonthlyData(Request $request, $id){
         $household = Household::findOrFail($id);
         if($household != null){
-            // get monthly data
-            $expenses = $household->expenses()->whereYear('expense_made_at', '=', date('Y'))->orderBy('expense_made_at', 'asc')->get();
 
-            $amounts = array();
-            $months = array();
-            $last_month = null;
-            $current_month_amount = 0;
-            foreach ($expenses as $expense) {
-                $timestamp = strtotime($expense->expense_made_at);
-                $month = date('M', $timestamp);
-                if($last_month == null){
-                    $current_month_amount += $expense->amount;
-                }
-                elseif($last_month == $month){
-                    $current_month_amount += $expense->amount;
-                }
-                if($last_month != null && $last_month != $month){
-                    array_push($months, $last_month);
-                    array_push($amounts, $current_month_amount);
-                    $current_month_amount = $expense->amount;
-                }
-                $last_month = $month;
-            }
-            array_push($months, $last_month);
-            array_push($amounts, $current_month_amount);
+            $expenses = $household->fetchMonthlyExpenses(date("Y"));
 
             return response()->json([
                 'success' => true,
-                'values' => $amounts,
-                'labels' => $months,
+                'expenses' => $expenses
             ]);
         }
         else{
@@ -192,7 +141,11 @@ class HouseholdsController extends Controller
         $household = Household::findOrFail($id);
         if($household != null && $household->user_id == Auth::id()){
             // get all expenses
-            $expenses = $household->expenses()->whereYear('expense_made_at', '=', date('Y'))->whereMonth('expense_made_at', '=', date('m'))->orderBy('expense_made_at', 'desc')->paginate(10);
+            $expenses = $household->fetchExpenses(null, date('m'), date('Y'))->orderBy('expense_made_at', 'desc');
+            $total_monthly_expenses = 0;
+            foreach ($expenses->get() as $expense) {
+                $total_monthly_expenses += $expense->amount;
+            }
 
             // get all members
             $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
@@ -204,20 +157,12 @@ class HouseholdsController extends Controller
             $categories = \App\ExpenseCategory::all();
 
             // get expenses by category
-            $expenses_by_category = DB::table('expenses')
-                                    ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
-                                    ->whereYear('expense_made_at', '=', date('Y'))
-                                    ->whereMonth('expense_made_at', '=', date('m'))
-                                    ->leftJoin('expense_categories', 'expenses.category_id', '=', 'expense_categories.id')
-                                    ->groupBy('category_id')
-                                    ->get();
-
-            // var_dump($expenses_by_category);
-            // exit();
+            $expenses_by_category = $household->getExpensesByCategory(null, date('m'), date('Y'));
 
             $data = [
                 'household' => $household,
-                'expenses' => $expenses,
+                'expenses' => $expenses->paginate(10),
+                'total_expenses' => $total_monthly_expenses,
                 'members' => $members,
                 'monthly_income' => $monthly_income,
                 'expense_categories' => $categories,

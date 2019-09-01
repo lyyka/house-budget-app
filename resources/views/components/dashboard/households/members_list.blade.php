@@ -37,6 +37,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $members->links() }}
         @else
             <p class="text-center text-muted">
                 No members added

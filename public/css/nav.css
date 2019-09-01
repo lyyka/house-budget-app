@@ -1,3 +1,10 @@
+/* top menu */
+#navbar{
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+
 /* menu on left */
 #menu_wrap{
     left: 0;

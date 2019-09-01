@@ -90,5 +90,14 @@
             }
         });
     </script>
+
     <script src="{{ asset('js/households/expense_form.js') }}"></script>
+    <script src="{{ asset('js/dashboard/todays_chart.js') }}"></script>
+    <script src="{{ asset('js/dashboard/year_chart.js') }}"></script>
+
+    {{-- call monthly and todays chart fetch functions --}}
+    <script>
+        fetchMonthlyData({{ $household->id }});
+        fetchTodaysData({{ $household->id }});
+    </script>
 @endsection
