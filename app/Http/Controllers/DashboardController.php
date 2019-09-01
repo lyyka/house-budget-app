@@ -25,12 +25,12 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $households = $user->households;
+        $households = $user->households()->orderBy('created_at', 'desc')->get();
         $data = [
             'households' => $households,
         ];
         if(count($households) > 0){
-            $data['paginated_households'] = $user->households()->paginate(5);
+            $data['quick_hoseholds'] = $user->households()->limit(5)->get();
         }
 
         return view('dashboard')->with($data);

@@ -24,4 +24,8 @@ class Household extends Model
     public function members(){
         return $this->hasMany('App\HouseholdMember');
     }
+
+    public function currency(){
+        return $this->belongsTo('App\Currency');
+    }
 }

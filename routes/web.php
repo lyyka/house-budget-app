@@ -27,3 +27,4 @@ Route::resource('users', 'UsersController', [
 
 // households
 Route::resource('households', 'HouseholdsController');
+Route::get('/households/{id}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');

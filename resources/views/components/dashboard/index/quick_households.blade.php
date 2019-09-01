@@ -1,13 +1,12 @@
-@extends('layouts.dashboard')
-
-@section('content')
-    <div class="container">
-        <h3>Browse Households</h3>
-        <a href="/households/create" class="px-3 py-1 bg-info text-white rounded shadow-sm border">
-            <i class="fas fa-plus"></i> Add Household
-        </a>
-        <hr />
-        @if (count($households) > 0)
+<div class="rounded shadow-sm p-4 border">
+    <h4>Households</h4>
+    <hr />
+    @if (count($households) == 0)
+        <p class="text-center text-muted">
+            No households data
+        </p>
+    @else
+        @foreach($quick_hoseholds as $household)
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -28,10 +27,10 @@
                     @endforeach
                 </tbody>
             </table>
-        @else
-            <p class="text-center text-muted">
-                No households, add some.
-            </p>
-        @endif
-    </div>
-@endsection
+        @endforeach
+    @endif
+    <hr />
+    <a href="/households/create" class="px-3 py-1 bg-info text-white rounded shadow-sm border">
+        <i class="fas fa-plus"></i> Add Household
+    </a>
+</div>
