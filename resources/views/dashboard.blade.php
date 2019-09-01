@@ -21,5 +21,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset("js/dashboard/home.js") }}"></script>
+    <script src="{{ asset("js/dashboard/todays_chart.js") }}"></script>
+    <script src="{{ asset("js/dashboard/year_chart.js") }}"></script>
 @endsection

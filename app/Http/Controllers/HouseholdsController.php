@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Household;
 use Auth;
@@ -206,12 +207,23 @@ class HouseholdsController extends Controller
             // get categories for expense form
             $categories = \App\ExpenseCategory::all();
 
+            // get expenses by category
+            $expenses_by_category = DB::table('expenses')
+                                    ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
+                                    ->leftJoin('expense_categories', 'expenses.category_id', '=', 'expense_categories.id')
+                                    ->groupBy('category_id')
+                                    ->get();
+
+            // var_dump($expenses_by_category);
+            // exit();
+
             $data = [
                 'household' => $household,
                 'expenses' => $expenses,
                 'members' => $members,
                 'monthly_income' => $monthly_income,
-                'expense_categories' => $categories
+                'expense_categories' => $categories,
+                'expenses_by_category' => $expenses_by_category
             ];
 
             return view('households.show')->with($data);

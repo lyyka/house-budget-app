@@ -8,13 +8,13 @@
     <div class="row">
         <div class="col-lg-6 mb-2">
             <p class="mb-1">
-                Monthly Income
+                <strong>Monthly Income</strong>
             </p>
             @money($monthly_income * 100, $household->currency->currency_short)
         </div>
         <div class="col-lg-6 mb-2">
             <p class="mb-1">
-                Expected Savings
+                <strong>Expected Savings</strong>
             </p>
             @money($household->expected_monthly_savings * 100, $household->currency->currency_short)
         </div>
