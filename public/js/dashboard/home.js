@@ -21,7 +21,7 @@ function todayDropdownChange(){
         req.done(function(data){
             if(data.success){
                 const ajax_data = {
-                    labels: ['0' , '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+                    labels: data.labels,
                     values: data.values
                 };
                 initTodayChart(ajax_data);
@@ -65,7 +65,7 @@ function initMonthlyChart(ajax_data){
             datasets: [{
                 label: 'Money spent by month',
                 backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(235,79,112)',
                 data: ajax_data.values
             }]
         },
@@ -87,8 +87,8 @@ function initTodayChart(ajax_data){
             labels: ajax_data.labels,
             datasets: [{
                 label: 'Money spent by hour',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(99, 255, 169)',
+                borderColor: 'rgb(79, 235, 149)',
                 data: ajax_data.values
             }]
         },

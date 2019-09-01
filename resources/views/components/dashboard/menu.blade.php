@@ -1,4 +1,4 @@
-<div class="position-absolute border-right shadow-sm bg-white pl-3 w-25 pr-5 h-100" id = "menu_wrap">
+<div class="position-fixed border-right shadow-sm bg-white pl-3 w-25 pr-5 h-100" id = "menu_wrap">
     <h4 class="text-right pt-3" id="close_menu">
         <i class="fas fa-times"></i>
     </h4>

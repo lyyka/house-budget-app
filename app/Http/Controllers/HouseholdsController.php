@@ -13,6 +13,56 @@ class HouseholdsController extends Controller
     }
 
     /**
+     * Get todays stats for the chart.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response JSON
+     */
+    public function getTodaysData(Request $request, $id){
+        $household = Household::findOrFail($id);
+        if($household != null){
+            // get monthly data
+            $expenses = $household->expenses()
+            ->whereDay('expense_made_at', '=', date('d'))
+            ->whereMonth('expense_made_at', '=', date('m'))
+            ->orderBy('expense_made_at', 'asc')->get();
+
+            $amounts = array();
+            $hours = array();
+            $last_hour = null;
+            $current_hour_amount = 0;
+            foreach ($expenses as $expense) {
+                $timestamp = strtotime($expense->expense_made_at);
+                $hour = date('H', $timestamp);
+                if($last_hour == null){
+                    $current_hour_amount += $expense->amount;
+                }
+                elseif($last_hour == $hour){
+                    $current_hour_amount += $expense->amount;
+                }
+                if($last_hour != null && $last_hour != $hour){
+                    array_push($hours, $last_hour);
+                    array_push($amounts, $current_hour_amount);
+                    $current_hour_amount = $expense->amount;
+                }
+                $last_hour = $hour;
+            }
+            array_push($hours, $last_hour);
+            array_push($amounts, $current_hour_amount);
+
+            return response()->json([
+                'success' => true,
+                'values' => $amounts,
+                'labels' => $hours,
+            ]);
+        }
+        else{
+            return response()->json(['success' => false]);
+        }
+    }
+
+    /**
      * Get monthly stats for the chart.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -23,7 +73,7 @@ class HouseholdsController extends Controller
         $household = Household::findOrFail($id);
         if($household != null){
             // get monthly data
-            $expenses = $household->expenses()->whereYear('expense_made_at', '=', date('Y'))->get();
+            $expenses = $household->expenses()->whereYear('expense_made_at', '=', date('Y'))->orderBy('expense_made_at', 'asc')->get();
 
             $amounts = array();
             $months = array();
@@ -31,7 +81,7 @@ class HouseholdsController extends Controller
             $current_month_amount = 0;
             foreach ($expenses as $expense) {
                 $timestamp = strtotime($expense->expense_made_at);
-                $month = date('m', $timestamp);
+                $month = date('M', $timestamp);
                 if($last_month == null){
                     $current_month_amount += $expense->amount;
                 }
@@ -41,14 +91,17 @@ class HouseholdsController extends Controller
                 if($last_month != null && $last_month != $month){
                     array_push($months, $last_month);
                     array_push($amounts, $current_month_amount);
+                    $current_month_amount = $expense->amount;
                 }
                 $last_month = $month;
             }
+            array_push($months, $last_month);
+            array_push($amounts, $current_month_amount);
 
             return response()->json([
                 'success' => true,
                 'values' => $amounts,
-                'labels' => $months
+                'labels' => $months,
             ]);
         }
         else{

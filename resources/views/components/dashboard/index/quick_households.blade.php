@@ -13,7 +13,6 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Members</th>
-                        <th scope="col">Currency</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,7 +21,6 @@
                             <th scope="row">{{ $household->id }}</th>
                             <td>{{ $household->name }}</td>
                             <td>{{ count($household->members) + 1 }}</td>
-                            <td>{{ $household->currency->currency_short }}</td>
                         </tr>
                     @endforeach
                 </tbody>

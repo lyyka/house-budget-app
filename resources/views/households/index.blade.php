@@ -21,7 +21,12 @@
                     @foreach ($households as $household)
                         <tr>
                             <th scope="row">{{ $household->id }}</th>
-                            <td>{{ $household->name }}</td>
+                            <td>
+                                <a href="/households/{{ $household->id }}" class="text-info">
+                                    {{ $household->name }}
+                                    <i class="fas fa-link"></i>
+                                </a>
+                            </td>
                             <td>{{ count($household->members) + 1 }}</td>
                             <td>{{ $household->currency->currency_short }}</td>
                         </tr>
