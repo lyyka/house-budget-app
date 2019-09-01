@@ -1,5 +1,5 @@
 <div class="rounded shadow-sm border p-4">
-    <h3>Expenses</h3>
+    <h3>This Month Expenses</h3>
     <div class="text-right">
         <button type="button" class="mb-2 px-3 py-1 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#addExpenseModal">
             Add Expense
@@ -16,7 +16,13 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $total_expenses = 0;
+                @endphp
                 @foreach ($expenses as $expense)
+                    @php
+                        $total_expenses += $expense->amount;
+                    @endphp
                     <tr>
                         <th scope="row">{{ $expense->name }}</th>
                         <td>
@@ -31,6 +37,10 @@
                 @endforeach
             </tbody>
         </table>
+        <hr />
+        <p>
+            <strong>Total: </strong> @money($total_expenses * 100, $household->currency->currency_short)
+        </p>
     @else
         <p class="text-center text-muted">
             No expense data

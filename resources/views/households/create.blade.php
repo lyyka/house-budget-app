@@ -27,9 +27,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                     <label for="monthly_income" class="d-block">Monthly Income:</label>
-                    <input id="monthly_income" type="number" min="100" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('monthly_income') is-invalid @enderror" name="monthly_income" value="{{ old('monthly_income') }}" required placeholder="Income" />
+                    <input id="monthly_income" type="number" min="100" class="w-100 rounded shadow-sm border py-2 px-3 @error('monthly_income') is-invalid @enderror" name="monthly_income" value="{{ old('monthly_income') }}" required placeholder="Income" />
+                    <label class="text-info">
+                        *Enter only your income to the household. You can add other members with their income afterwards.
+                    </label>
                     @error('monthly_income')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
@@ -45,7 +48,7 @@
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <label for="current_state" class="d-block">Current Budget State (optional):</label>
-                    <input id="current_state" type="number" class="w-100 rounded shadow-sm border py-2 px-3 @error('current_state') is-invalid @enderror" name="current_state" value="{{ old('current_state') }}" placeholder="How much do you expect to save?" />
+                    <input id="current_state" type="number" class="w-100 rounded shadow-sm border py-2 px-3 @error('current_state') is-invalid @enderror" name="current_state" value="{{ old('current_state') }}" placeholder="The current remaining household budget" />
                     <label class = "text-muted">Defaults to monthly income</label>
                     @error('current_state')
                         <label class = "d-block text-danger">{{ $message }}</label>
@@ -53,7 +56,7 @@
                 </div>
                 <div class="col-lg-6">
                     <label for="budget_reset_day" class="d-block">When is the budget reset?</label>
-                    <input id="budget_reset_day" type="number" min="1" max="31" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" name="budget_reset_day" value="{{ old('budget_reset_day') }}" required placeholder="How much do you expect to save?" />
+                    <input id="budget_reset_day" type="number" min="1" max="31" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" name="budget_reset_day" value="{{ old('budget_reset_day') }}" required placeholder="When will the budget be reset to total monthly income?" />
                     @error('budget_reset_day')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror

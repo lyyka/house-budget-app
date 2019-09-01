@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="text-center mb-5">{{ $household->name }}</h1>
+        <h1 class="text-center mb-5 pb-5">{{ $household->name }}</h1>
 
         @include('components.dashboard.households.add_expense')
         @include('components.dashboard.households.add_member')
@@ -16,21 +16,28 @@
                 @include('components.dashboard.households.money')
             </div>
             <div class="col-lg-6 mb-4">
-                @include('components.dashboard.households.expenses_list')
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.members_list')
             </div>
         </div>
 
-        @include('components.dashboard.households.categories_chart')
+        <div class="mb-4">
+            @include('components.dashboard.households.expenses_list')
+        </div>
+    
+        <div class="mb-4">
+            @include('components.dashboard.households.categories_chart')
+        </div>
+        <div class="mb-4">
+            @include('components.dashboard.households.todays_chart')
+        </div>
+        <div class="mb-4">
+            @include('components.dashboard.households.monthly_chart')
+        </div>
     </div>
 @endsection
 
 @section('scripts')
+    {{-- categories/expense chart --}}
     <script>
         let category_labels = [];
         let category_values = [];

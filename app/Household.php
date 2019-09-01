@@ -14,7 +14,7 @@ class Household extends Model
     public $timestamps = true;
 
     public function owner(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function expenses(){
@@ -26,6 +26,15 @@ class Household extends Model
     }
 
     public function currency(){
-        return $this->belongsTo('App\Currency');
+        return $this->belongsTo('App\Currency', 'currency_id');
+    }
+
+    public function getTotalIncome(){
+        $members = $this->members;
+        $monthly_income = $this->monthly_income;
+        foreach($members as $member){
+            $monthly_income += $member->additional_income;
+        }
+        return $monthly_income;
     }
 }

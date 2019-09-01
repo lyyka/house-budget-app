@@ -192,17 +192,13 @@ class HouseholdsController extends Controller
         $household = Household::findOrFail($id);
         if($household != null && $household->user_id == Auth::id()){
             // get all expenses
-            $expenses = $household->expenses()->orderBy('expense_made_at', 'desc')->paginate(10);
+            $expenses = $household->expenses()->whereYear('expense_made_at', '=', date('Y'))->whereMonth('expense_made_at', '=', date('m'))->orderBy('expense_made_at', 'desc')->paginate(10);
 
             // get all members
             $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
 
             // generate monthly income base on monthly income from household + any other members that have additional income
-            $members = $household->members;
-            $monthly_income = $household->monthly_income;
-            foreach($members as $member){
-                $monthly_income += $member->additional_income;
-            }
+            $monthly_income = $household->getTotalIncome();
 
             // get categories for expense form
             $categories = \App\ExpenseCategory::all();
@@ -210,6 +206,8 @@ class HouseholdsController extends Controller
             // get expenses by category
             $expenses_by_category = DB::table('expenses')
                                     ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
+                                    ->whereYear('expense_made_at', '=', date('Y'))
+                                    ->whereMonth('expense_made_at', '=', date('m'))
                                     ->leftJoin('expense_categories', 'expenses.category_id', '=', 'expense_categories.id')
                                     ->groupBy('category_id')
                                     ->get();
