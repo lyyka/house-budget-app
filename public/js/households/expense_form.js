@@ -6,16 +6,21 @@ function docReady(e){
 }
 
 function toggleCategoriesDropdown(e){
-    const dropdown = $(this).parent().find("#categories_dropdown");
-    const icon = $(this).find('i');
+    toggle();
+}
+
+function toggle(){
+    const dropdown = $("#open_categories_dropdown").parent().find("#categories_dropdown");
+    const icon = $("#open_categories_dropdown").find('i');
     icon.toggleClass('fa-chevron-circle-down fa-chevron-circle-up')
-    dropdown.slideToggle();
+    dropdown.toggle();
 }
 
 function categoriesDropdownItemSelected(e){
     const value = $(this).find('.category_id').text();
-    console.log(value);
     
     $("#category").val(value);
     $("#categories_dropdown_text").html($(this).html());
+
+    toggle();
 }

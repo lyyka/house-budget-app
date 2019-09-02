@@ -11,6 +11,23 @@ class ExpensesController extends Controller
         $this->middleware('auth');
     }
 
+    public function fetchExpense(Request $request, $id){
+        $expense = \App\Expense::findOrFail($id);
+        if($expense != null && $expense->household->owner->id == Auth::id()){
+            return response()->json([
+                'success' => true,
+                'expense_data' => $expense,
+                'expense_category' => $expense->category
+            ]);
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied'
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -16,3 +16,7 @@ body{
 .font-lobster{
     font-family: 'Lobster', sans-serif;
 }
+
+.cursor-pointer{
+    cursor: pointer;
+}

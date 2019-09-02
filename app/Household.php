@@ -79,7 +79,7 @@ class Household extends Model
     }
 
     // gets expenses by each category in a GIVEN DAY in a GIVEN MONTH in a GIVEN YEAR
-    public function getExpensesByCategory($day = null, $month = null, $year = null){
+    public function fetchExpensesByCategory($day = null, $month = null, $year = null){
         $expenses = DB::table('expenses')
         ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
         ->where('household_id', '=', $this->id);
@@ -97,5 +97,16 @@ class Household extends Model
         ->get();
 
         return $expenses;
+    }
+
+    // fetches data only from the curren week
+    public function fetchCurrentWeekData(){
+        return DB::table('expenses')
+        ->select(DB::raw('DAYNAME(expense_made_at) as dayname'), DB::raw('SUM(amount) as total'))
+        ->where('household_id', '=', $this->id)
+        ->where(DB::raw('WEEK(expense_made_at)'), '=', DB::raw('WEEK(NOW())'))
+        ->orderBy(DB::raw('DAYNAME(expense_made_at)'), 'desc')
+        ->groupBy(DB::raw('DAYNAME(expense_made_at)'))
+        ->get();
     }
 }

@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 @foreach ($expenses as $expense)
-                    <tr>
+                    <tr class="cursor-pointer expense_row" data-expense-id = "{{ $expense->id }}">
                         <th scope="row">{{ $expense->name }}</th>
                         <td>
                             @money($expense->amount * 100, $household->currency->currency_short)

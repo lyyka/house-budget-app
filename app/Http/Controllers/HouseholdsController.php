@@ -13,6 +13,38 @@ class HouseholdsController extends Controller
         $this->middleware('auth');
     }
 
+    public function getExpensesByCategory(Request $request, $id){
+        $household = Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+
+            $expenses = $household->fetchExpensesByCategory(null, date('m'), date('Y'));
+
+            return response()->json([
+                'success' => true,
+                'expenses' => $expenses
+            ]);
+        }
+        else{
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function getCurrentWeekData(Request $request, $id){
+        $household = Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+
+            $expenses = $household->fetchCurrentWeekData();
+
+            return response()->json([
+                'success' => true,
+                'expenses' => $expenses
+            ]);
+        }
+        else{
+            return response()->json(['success' => false]);
+        }
+    }
+
     /**
      * Get todays stats for the chart.
      *
@@ -22,7 +54,7 @@ class HouseholdsController extends Controller
      */
     public function getTodaysData(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null){
+        if($household != null && $household->owner->id == Auth::id()){
 
             $expenses = $household->fetchDayExpenses(date('d'), date('m'), date('Y'));
 
@@ -45,7 +77,7 @@ class HouseholdsController extends Controller
      */
     public function getMonthlyData(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null){
+        if($household != null && $household->owner->id == Auth::id()){
 
             $expenses = $household->fetchMonthlyExpenses(date("Y"));
 
@@ -157,7 +189,7 @@ class HouseholdsController extends Controller
             $categories = \App\ExpenseCategory::all();
 
             // get expenses by category
-            $expenses_by_category = $household->getExpensesByCategory(null, date('m'), date('Y'));
+            // $expenses_by_category = $household->getExpensesByCategory(null, date('m'), date('Y'));
 
             $data = [
                 'household' => $household,
@@ -166,7 +198,7 @@ class HouseholdsController extends Controller
                 'members' => $members,
                 'monthly_income' => $monthly_income,
                 'expense_categories' => $categories,
-                'expenses_by_category' => $expenses_by_category
+                // 'expenses_by_category' => $expenses_by_category
             ];
 
             return view('households.show')->with($data);
