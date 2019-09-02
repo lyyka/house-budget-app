@@ -27,10 +27,15 @@ Route::resource('users', 'UsersController', [
 
 // households
 Route::resource('households', 'HouseholdsController');
+// chart data collection
 Route::get('/households/{id}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');
 Route::get('/households/{id}/today_data', 'HouseholdsController@getTodaysData')->name('household.today');
 Route::get('/households/{id}/current_week_data', 'HouseholdsController@getCurrentWeekData')->name('household.currentWeek');
 Route::get('/households/{id}/expenses_by_category', 'HouseholdsController@getExpensesByCategory')->name('household.byCategory');
+// go back and through expenses list by month
+Route::get('/households/{id}/expenses/next_month', 'HouseholdsController@loadExpensesFromNextMonth');
+Route::get('/households/{id}/expenses/prev_month', 'HouseholdsController@loadExpensesFromPreviousMonth');
+Route::get('/households/expenses/reset_expenses_list', 'HouseholdsController@resetExpensesList');
 
 // expenses
 Route::resource('expenses', 'ExpensesController', [

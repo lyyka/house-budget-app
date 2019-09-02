@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Household;
 use Auth;
+use Session;
 
 class HouseholdsController extends Controller
 {
@@ -13,6 +14,61 @@ class HouseholdsController extends Controller
         $this->middleware('auth');
     }
 
+    public function resetExpensesList(Request $request){
+        Session::forget('expense_list_view_year');
+        Session::forget('expense_list_view_month_string');
+        Session::forget('expense_list_view_month');
+
+        return redirect()->back();
+    }
+
+    public function goThroughTimeForExpensesList($household, $interval){
+        if(!Session::has('expense_list_view_year') &&
+        !Session::has('expense_list_view_month_string') &&
+        !Session::has('expense_list_view_month')){
+            Session::put('expense_list_view_year', date("Y"));
+            Session::put('expense_list_view_month_string', date("M"));
+            Session::put('expense_list_view_month', date("m"));
+        }
+
+        $current_view_month = Session::get('expense_list_view_month');
+        $current_view_year = Session::get('expense_list_view_year');
+
+        $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
+        $modified = $datetime->modify($interval);
+
+        Session::put('expense_list_view_month_string', $modified->format('M'));
+        Session::put('expense_list_view_month', $modified->format('m'));
+        Session::put('expense_list_view_year', $modified->format('Y'));
+    }
+
+    // gets expenses from previous month (previous month from one stored in session)
+    public function loadExpensesFromPreviousMonth(Request $request, $id){
+        $household = \App\Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+            $this->goThroughTimeForExpensesList($household, "-1 months");
+
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back()->with('error', 'Access denied');
+        }
+    }
+
+    // gets expenses from next month (next month from one stored in session)
+    public function loadExpensesFromNextMonth(Request $request, $id){
+        $household = \App\Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+            $this->goThroughTimeForExpensesList($household, "+1 months");
+
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back()->with('error', 'Access denied');
+        }
+    }
+    
+    // return expenses grouped by category
     public function getExpensesByCategory(Request $request, $id){
         $household = Household::findOrFail($id);
         if($household != null && $household->owner->id == Auth::id()){
@@ -29,6 +85,7 @@ class HouseholdsController extends Controller
         }
     }
 
+    // returns current week data
     public function getCurrentWeekData(Request $request, $id){
         $household = Household::findOrFail($id);
         if($household != null && $household->owner->id == Auth::id()){
@@ -174,8 +231,18 @@ class HouseholdsController extends Controller
     {
         $household = Household::findOrFail($id);
         if($household != null && $household->user_id == Auth::id()){
+            // viewing month for expenses table
+            if(!Session::has('expense_list_view_year') &&
+            !Session::has('expense_list_view_month_string') &&
+            !Session::has('expense_list_view_month')){
+                Session::put('expense_list_view_year', date("Y"));
+                Session::put('expense_list_view_month_string', date("M"));
+                Session::put('expense_list_view_month', date("m"));
+            }
+
             // get all expenses
-            $expenses = $household->fetchExpenses(null, date('m'), date('Y'))->orderBy('expense_made_at', 'desc');
+            $expenses = $household->fetchExpenses(null, Session::get('expense_list_view_month'), Session::get('expense_list_view_year'))->orderBy('expense_made_at', 'desc');
+
             $total_monthly_expenses = 0;
             foreach ($expenses->get() as $expense) {
                 $total_monthly_expenses += $expense->amount;
@@ -190,17 +257,21 @@ class HouseholdsController extends Controller
             // get categories for expense form
             $categories = \App\ExpenseCategory::all();
 
-            // get expenses by category
-            // $expenses_by_category = $household->getExpensesByCategory(null, date('m'), date('Y'));
+            // viewing months for charts
+            
 
             $data = [
-                'household' => $household,
-                'expenses' => $expenses->paginate(10),
-                'total_expenses' => $total_monthly_expenses,
-                'members' => $members,
-                'monthly_income' => $monthly_income,
-                'expense_categories' => $categories,
-                // 'expenses_by_category' => $expenses_by_category
+                'currencies' => \App\Currency::all(), // for the household edit form
+                'household' => $household, // household info
+                'expenses' => $expenses->paginate(10), // expenses list
+                'total_expenses' => $total_monthly_expenses, // total expenses from current month
+                'members' => $members, // members of the household
+                'monthly_income' => $monthly_income, // monthly income that is household.monthly_incom + each memebrs additional income
+                'expense_categories' => $categories, // categories for expense form
+                'expense_list_current_date' => [
+                    'month' => Session::get('expense_list_view_month_string'),
+                    'year' => Session::get('expense_list_view_year')
+                ], // current date to show above expense list
             ];
 
             return view('households.show')->with($data);
@@ -231,7 +302,38 @@ class HouseholdsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $currenices_count = count(\App\Currency::all());
+
+        $validation = [
+            'name' => 'required|string|max:191',
+            'currency' => 'required|integer|min:1|max:' . $currenices_count,
+            'monthly_income' => 'required|integer',
+            'expected_monthly_savings' => 'nullable|integer|min:0',
+            'budget_reset_day' => 'required|integer|min:1|max:31'
+        ];
+
+        $request->validate($validation);
+
+        $household = \App\Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+            $household->name = $request->input('name');
+            $household->currency_id = $request->input('currency');
+            $household->monthly_income = $request->input('monthly_income');
+            if($request->input('expected_monthly_savings') != null){
+                $household->expected_monthly_savings = $request->input('expected_monthly_savings');
+            }
+            $household->budget_reset_day = $request->input('budget_reset_day');
+            $household->save();
+
+            toastr()->success('Household updated!');
+
+            return redirect('/households' . '/' . $id);
+        }
+        else{
+            toastr()->error('Access denied');
+            return redirect()->back();
+        }
+        
     }
 
     /**
@@ -242,6 +344,16 @@ class HouseholdsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $household = \App\Household::findOrFail($id);
+        if($household != null && $household->owner->id == Auth::id()){
+            $household->delete();
+
+            toastr()->success('Household removed!');
+            return redirect('/dashboard');
+        }
+        else{
+            toastr()->error('Household not found!');
+            return redirect('/dashboard');
+        }
     }
 }

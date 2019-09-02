@@ -1,6 +1,20 @@
 <div class="rounded shadow-sm border p-4">
-    <h3>This Month Expenses</h3>
+    <h3>Expense List by Month</h3>
     <div class="text-right">
+        <div class="text-dark float-left">
+            <a href="/households/{{ $household->id }}/expenses/prev_month" id="expense_table_prev" class="cursor-pointer text-dark">
+                <i class="fas fa-angle-left"></i>
+            </a>
+            {{ $expense_list_current_date['month'] }}, {{ $expense_list_current_date['year'] }}
+            <a href="/households/{{ $household->id }}/expenses/next_month" id="expense_table_next" class="cursor-pointer text-dark">
+                <i class="fas fa-angle-right"></i>
+            </a>
+            @if (date('M') != $expense_list_current_date['month'] || date("Y") != $expense_list_current_date['year'])
+                <a href="/households/expenses/reset_expenses_list" class="cursor-pointer text-dark">
+                    <i class="fas fa-sync-alt"></i>
+                </a>
+            @endif
+        </div>
         <button type="button" class="mb-2 px-3 py-1 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#addExpenseModal">
             Add Expense
         </button>

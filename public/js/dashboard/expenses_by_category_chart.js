@@ -24,8 +24,6 @@ function fetchExpensesByCategoryData(household_id){
         });
 
         req.done(function(data){
-            console.log(data);
-            
             const expenses = data.expenses;
             const categories = [];
             const category_colors = [];

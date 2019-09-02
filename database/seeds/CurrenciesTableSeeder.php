@@ -52,5 +52,9 @@ class CurrenciesTableSeeder extends Seeder
             'currency_name' => "New Zealand dollar",
             'currency_short' => "NZD"
         ]);
+        DB::table('currencies')->insert([
+            'currency_name' => "Serbian dinar",
+            'currency_short' => "RSD"
+        ]);
     }
 }
