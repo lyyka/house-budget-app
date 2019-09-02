@@ -12,6 +12,7 @@
         </h5>
 
         {{-- modals --}}
+        @include('components.dashboard.households.destroy_household')
         @include('components.dashboard.households.edit_household')
         @include('components.dashboard.households.display_expense')
         @include('components.dashboard.households.add_expense')
@@ -46,15 +47,11 @@
         </div>
 
         {{-- destroy household --}}
-        <form action="/households/{{ $household->id }}" method="POST" class="mb-5">
-            @csrf
-            @method('DELETE')
-            <div class="text-center">
-                <button type="submit" class="border rounded shadow-sm bg-light text-dark p-2">
-                    Delete this household
-                </button>
-            </div>
-        </form>
+        <div class="text-center mb-5">
+            <button type="button" class="border rounded shadow-sm bg-light text-dark p-2" data-toggle="modal" data-target="#destroyHouseholdModal">
+                Delete this household
+            </button>
+        </div>
     </div>
 @endsection
 
@@ -76,7 +73,7 @@
 
     {{-- call monthly and todays chart fetch functions --}}
     <script>
-        fetchMonthlyData({{ $household->id }});
+        fetchMonthlyData({{ $household->id }}, (new Date()).getFullYear());
         fetchTodaysData({{ $household->id }});
         fetchCurrentWeeksData({{ $household->id }});
         fetchExpensesByCategoryData({{ $household->id }});

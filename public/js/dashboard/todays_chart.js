@@ -24,15 +24,15 @@ function fetchTodaysData(household_id){
         });
 
         req.done(function(data){
-            const response = data.expenses;
-            const labels = [];
-            const values = [];
-            response.forEach(expense => {
-                labels.push(expense.hour);
-                values.push(expense.total);
-            });
-            
             if(data.success){
+                const response = data.expenses;
+                const labels = [];
+                const values = [];
+                response.forEach(expense => {
+                    labels.push(expense.hour);
+                    values.push(expense.total);
+                });
+            
                 const ajax_data = {
                     labels: labels,
                     values: values

@@ -24,18 +24,17 @@ function fetchExpensesByCategoryData(household_id){
         });
 
         req.done(function(data){
-            const expenses = data.expenses;
-            const categories = [];
-            const category_colors = [];
-            const totals = [];
-
-            expenses.forEach(expense => {
-                categories.push(expense.category_name);
-                category_colors.push("#" + expense.category_color);
-                totals.push(expense.total);
-            });
-            
             if(data.success){
+                const expenses = data.expenses;
+                const categories = [];
+                const category_colors = [];
+                const totals = [];
+
+                expenses.forEach(expense => {
+                    categories.push(expense.category_name);
+                    category_colors.push("#" + expense.category_color);
+                    totals.push(expense.total);
+                });
                 const ajax_data = {
                     labels: categories,
                     colors: category_colors,

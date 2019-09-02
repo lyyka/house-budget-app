@@ -24,16 +24,16 @@ function fetchCurrentWeeksData(household_id){
         });
 
         req.done(function(data){
-            const expenses = data.expenses;
-            const days = [];
-            const totals = [];
-
-            expenses.forEach(expense => {
-                days.push(expense.dayname);
-                totals.push(expense.total);
-            });
-            
             if(data.success){
+                const expenses = data.expenses;
+                const days = [];
+                const totals = [];
+
+                expenses.forEach(expense => {
+                    days.push(expense.dayname);
+                    totals.push(expense.total);
+                });
+            
                 const ajax_data = {
                     labels: days,
                     values: totals

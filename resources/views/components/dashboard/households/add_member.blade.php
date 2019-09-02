@@ -28,8 +28,8 @@
                         </div>
                     </div>
             
-                    <label for="additional_income" class="d-block">Additional Income:</label>
-                    <input id="additional_income" type="number" min="1" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" required autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
+                    <label for="additional_income" class="d-block">Additional Income (optional):</label>
+                    <input id="additional_income" type="number" min="0" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
                     @error('additional_income')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror

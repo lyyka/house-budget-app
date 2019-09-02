@@ -15,7 +15,7 @@ class MembersController extends Controller
         $validation = [
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
-            'additional_income' => 'required|numeric|min:1',
+            'additional_income' => 'nullable|numeric|min:0',
         ];
 
         if(!$update){
@@ -42,7 +42,7 @@ class MembersController extends Controller
             $member->household_id = $request->input('household_id');
             $member->first_name = $request->input('first_name');
             $member->last_name = $request->input('last_name');
-            $member->additional_income = $request->input('additional_income');
+            $member->additional_income = $request->input('additional_income') != null ? $request->input('additional_income') : 0;
             $member->save();
 
             toastr()->success('Household member added');
@@ -93,9 +93,14 @@ class MembersController extends Controller
 
         if($member != null && $member->household->user_id == Auth::id()){
 
+            // decrease members household current balance, because observer will increase it by new additional income
+            $members_household = $member->household;
+            $members_household->current_state -= $member->additional_income;
+            $members_household->save();
+
             $member->first_name = $request->input('first_name');
             $member->last_name = $request->input('last_name');
-            $member->additional_income = $request->input('additional_income');
+            $member->additional_income = $request->input('additional_income') != null ? $request->input('additional_income') : 0;
             $member->save();
 
             toastr()->success('Household member updated');

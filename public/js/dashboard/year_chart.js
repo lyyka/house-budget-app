@@ -1,9 +1,14 @@
 $(document).ready(docReady);
 let year_chart;
+let current_year;
+let global_household_id;
 
 function docReady(e){
     monthlyDropdownChange();
     $("#monthly_households_dropdown").on('change', monthlyDropdownChange);
+    $("#yearly_chart_prev_year").on('click', prevYear);
+    $("#yearly_chart_next_year").on('click', nextYear);
+    $("#refresh_yearly_chart").on('click', refreshYearlyChart);
 }
 
 function monthlyDropdownChange(){
@@ -11,28 +16,32 @@ function monthlyDropdownChange(){
         year_chart.destroy();
     }
     const household_id = $("#monthly_households_dropdown").val();
-    fetchMonthlyData(household_id);
+    fetchMonthlyData(household_id, (new Date()).getFullYear());
 }
 
-function fetchMonthlyData(household_id){
+function fetchMonthlyData(household_id, year){
     if(household_id > 0){
+        global_household_id = household_id;
         const req = $.ajax({
             type: "GET",
-            url: '/households/' + household_id + '/monthly_data',
+            url: '/households/' + household_id + '/' + year + '/monthly_data',
             async: true,
             cache: false,
         });
 
         req.done(function(data){
-            const response = data.expenses;
-            const labels = [];
-            const values = [];
-            response.forEach(expense => {
-                labels.push(numberToMonthString(expense.month));
-                values.push(expense.total);
-            });
-            
             if(data.success){
+                const response = data.expenses;
+                const labels = [];
+                const values = [];
+                response.forEach(expense => {
+                    labels.push(numberToMonthString(expense.month));
+                    values.push(expense.total);
+                });
+
+                current_year = year;
+                $("#current_year_for_yearly_chart").text(current_year)
+
                 const ajax_data = {
                     labels: labels,
                     values: values
@@ -77,4 +86,20 @@ function initMonthlyChart(ajax_data){
             }
         }
     });
+}
+
+function prevYear(e){
+    if(current_year - 1 > 0){
+        fetchMonthlyData(global_household_id, current_year - 1);
+    }
+}
+
+function nextYear(e){
+    if(current_year + 1 <= (new Date()).getFullYear()){
+        fetchMonthlyData(global_household_id, current_year + 1);
+    }
+}
+
+function refreshYearlyChart(e){
+    fetchMonthlyData(global_household_id, (new Date()).getFullYear());
 }
