@@ -1,4 +1,5 @@
 $(document).ready(docReady);
+let weekdays_chart;
 
 function docReady(e){
     currentWeekDropdownChange();
@@ -6,6 +7,9 @@ function docReady(e){
 }
 
 function currentWeekDropdownChange(){
+    if(weekdays_chart != undefined){
+        weekdays_chart.destroy();
+    }
     const household_id = $("#current_week_households_dropdown").val();
     fetchCurrentWeeksData(household_id);
 }
@@ -43,7 +47,7 @@ function fetchCurrentWeeksData(household_id){
 function initThisWeekChart(ajax_data){
     // init this month chart
     const ctx = document.getElementById('current_week_chart').getContext('2d');
-    var chart = new Chart(ctx, {
+    weekdays_chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
     

@@ -135,8 +135,8 @@ class HouseholdsController extends Controller
             'name' => 'required|string|max:191',
             'currency' => 'required|integer|min:1|max:' . $currenices_count,
             'monthly_income' => 'required|integer|min:100',
-            'expected_monthly_savings' => 'required|integer|min:100',
-            'current_state' => 'nullable|integer',
+            'expected_monthly_savings' => 'nullable|integer|min:0',
+            'current_state' => 'nullable|integer|min:0',
             'budget_reset_day' => 'required|integer|min:1|max:31'
         ];
 
@@ -147,7 +147,9 @@ class HouseholdsController extends Controller
         $household->name = $request->input('name');
         $household->currency_id = $request->input('currency');
         $household->monthly_income = $request->input('monthly_income');
-        $household->expected_monthly_savings = $request->input('expected_monthly_savings');
+        if($request->input('expected_monthly_savings') != null){
+            $household->expected_monthly_savings = $request->input('expected_monthly_savings');
+        }
         if($request->input('current_state') != null){
             $household->current_state = $request->input('current_state');
         }

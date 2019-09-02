@@ -1,4 +1,5 @@
 $(document).ready(docReady);
+let daily_chart;
 
 function docReady(e){
     todayDropdownChange();
@@ -6,6 +7,9 @@ function docReady(e){
 }
 
 function todayDropdownChange(){
+    if(daily_chart != undefined){
+        daily_chart.destroy();
+    }
     const household_id = $("#today_households_dropdown").val();
     fetchTodaysData(household_id);
 }
@@ -42,7 +46,7 @@ function fetchTodaysData(household_id){
 function initTodayChart(ajax_data){
     // init this month chart
     const ctx = document.getElementById('today_chart').getContext('2d');
-    var chart = new Chart(ctx, {
+    daily_chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
     

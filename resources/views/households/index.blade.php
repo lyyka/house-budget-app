@@ -33,7 +33,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $households->links() }}
+            {{ $households->links("vendor.pagination.bootstrap-4") }}
         @else
             <p class="text-center text-muted">
                 No households, add some.

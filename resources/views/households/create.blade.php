@@ -38,8 +38,8 @@
                     @enderror
                 </div>
                 <div class="col-lg-6">
-                    <label for="expected_monthly_savings" class="d-block">Expected Monthly Savings:</label>
-                    <input id="expected_monthly_savings" min="100" type="number" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('expected_monthly_savings') is-invalid @enderror" name="expected_monthly_savings" value="{{ old('expected_monthly_savings') }}" required placeholder="How much do you expect to save?" />
+                    <label for="expected_monthly_savings" class="d-block">Expected Monthly Savings (optional):</label>
+                    <input id="expected_monthly_savings" min="0" type="number" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('expected_monthly_savings') is-invalid @enderror" name="expected_monthly_savings" value="{{ old('expected_monthly_savings') }}" placeholder="How much do you expect to save?" />
                     @error('expected_monthly_savings')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <label for="current_state" class="d-block">Current Budget State (optional):</label>
-                    <input id="current_state" type="number" class="w-100 rounded shadow-sm border py-2 px-3 @error('current_state') is-invalid @enderror" name="current_state" value="{{ old('current_state') }}" placeholder="The current remaining household budget" />
+                    <input id="current_state" type="number" min="0" class="w-100 rounded shadow-sm border py-2 px-3 @error('current_state') is-invalid @enderror" name="current_state" value="{{ old('current_state') }}" placeholder="The current remaining household budget" />
                     <label class = "text-muted">Defaults to monthly income</label>
                     @error('current_state')
                         <label class = "d-block text-danger">{{ $message }}</label>

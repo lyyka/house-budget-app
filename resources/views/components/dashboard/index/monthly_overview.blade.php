@@ -1,5 +1,5 @@
 <div class="rounded shadow-sm p-4 border">
-    <h4>Monthly Overview</h4>
+    <h4>Current Year Report</h4>
     <hr />
     @if (count($households) == 0)
         <p class="text-center text-muted">

@@ -31,7 +31,7 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $expenses->links() }}
+        {{ $expenses->links("vendor.pagination.bootstrap-4") }}
         <hr />
         <p>
             <strong>Total: </strong> @money($total_expenses * 100, $household->currency->currency_short)

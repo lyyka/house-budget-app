@@ -1,4 +1,5 @@
 $(document).ready(docReady);
+let year_chart;
 
 function docReady(e){
     monthlyDropdownChange();
@@ -6,6 +7,9 @@ function docReady(e){
 }
 
 function monthlyDropdownChange(){
+    if(year_chart != undefined){
+        year_chart.destroy();
+    }
     const household_id = $("#monthly_households_dropdown").val();
     fetchMonthlyData(household_id);
 }
@@ -47,7 +51,7 @@ function numberToMonthString(number){
 function initMonthlyChart(ajax_data){
     // init this month chart
     const ctx = document.getElementById('this_year_chart').getContext('2d');
-    var chart = new Chart(ctx, {
+    year_chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
 

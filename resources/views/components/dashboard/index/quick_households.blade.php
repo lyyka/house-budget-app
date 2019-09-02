@@ -6,31 +6,29 @@
             No households data
         </p>
     @else
-        @foreach($quick_hoseholds as $household)
-            <table class="table table-striped">
-                <thead>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Members</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($quick_hoseholds as $household)
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Members</th>
+                        <th scope="row">{{ $household->id }}</th>
+                        <td>
+                            <a href="/households/{{ $household->id }}" class="text-info">
+                                {{ $household->name }}
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </td>
+                        <td>{{ count($household->members) + 1 }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($households as $household)
-                        <tr>
-                            <th scope="row">{{ $household->id }}</th>
-                            <td>
-                                <a href="/households/{{ $household->id }}" class="text-info">
-                                    {{ $household->name }}
-                                    <i class="fas fa-link"></i>
-                                </a>
-                            </td>
-                            <td>{{ count($household->members) + 1 }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endforeach
+                @endforeach
+            </tbody>
+        </table>
     @endif
     <hr />
     <a href="/households/create" class="px-3 py-1 bg-info text-white rounded shadow-sm border">

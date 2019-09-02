@@ -37,7 +37,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $members->links() }}
+            {{ $members->links("vendor.pagination.bootstrap-4") }}
         @else
             <p class="text-center text-muted">
                 No members added
