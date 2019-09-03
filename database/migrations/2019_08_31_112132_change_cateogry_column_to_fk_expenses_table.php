@@ -17,7 +17,8 @@ class ChangeCateogryColumnToFkExpensesTable extends Migration
             $table->dropColumn('category');
         });
         Schema::table('expenses', function (Blueprint $table) {
-            $table->integer('category_id')->references('id')->on('expense_categories');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('expense_categories');
         });
     }
 

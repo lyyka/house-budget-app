@@ -14,7 +14,8 @@ class AddCurrencyIdToHouseholdsTable extends Migration
     public function up()
     {
         Schema::table('households', function (Blueprint $table) {
-            $table->integer('currency_id')->references('id')->on('currencies');
+            $table->unsignedBigInteger('currency_id');
+            $table->foreign('currency_id')->references('id')->on('currencies');
         });
     }
 

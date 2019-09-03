@@ -14,12 +14,13 @@ class CreatePeopleInHouseholdTable extends Migration
     public function up()
     {
         Schema::create('people_in_household', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->integer('household_id')->references('id')->on('households')->onDelete('cascade');
+            $table->unsignedBigInteger('household_id');
+            $table->foreign('household_id')->references('id')->on('households')->onDelete('cascade');
             $table->string('first_name');
             $table->string('last_name');
             $table->double('additional_income')->nullable();
-            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

@@ -14,8 +14,10 @@ class CreateHouseholdsTable extends Migration
     public function up()
     {
         Schema::create('households', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->double('monthly_income');
             $table->double('current_state'); // current amount of money left
             $table->double('expected_monthly_savings')->nullable();
