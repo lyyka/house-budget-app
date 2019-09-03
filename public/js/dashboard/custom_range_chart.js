@@ -54,7 +54,8 @@ function fetchCustomRangeData(household_id){
                 const totals = [];
 
                 expenses.forEach(expense => {
-                    days.push(expense.date);
+                    const date_obj = new Date(expense.date);
+                    days.push((date_obj.getDay()+1) + '/' + (date_obj.getMonth()+1) + '/' + date_obj.getFullYear());
                     totals.push(expense.total);
                 });
             
@@ -65,6 +66,11 @@ function fetchCustomRangeData(household_id){
                 initCustomRangeChart(ajax_data);
             }
         }); 
+
+        req.fail(function(data){
+            console.log(data);
+            
+        })
     }
 }
 

@@ -43,7 +43,7 @@
                             <div class="rounded-circle d-inline-block" style="width:15px; height:15px; background-color: #{{ $expense->category->hex_color }}"></div>
                             {{ $expense->category->name }}
                         </td>
-                        <td class="d-none d-lg-table-cell">{{ $expense->expense_made_at }}</td>
+                        <td class="d-none d-lg-table-cell">{{ date("d M, Y H:i", strtotime($expense->expense_made_at)) }}</td>
                     </tr>
                 @endforeach
             </tbody>

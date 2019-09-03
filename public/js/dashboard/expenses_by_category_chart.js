@@ -51,7 +51,7 @@ function initChartByCategory(ajax_data){
     }
     expenses_by_category_chart = new Chart(ctx, {
         // The type of chart we want to create
-        type: 'bar',
+        type: 'doughnut',
     
         // The data for our dataset
         data: {
@@ -66,9 +66,9 @@ function initChartByCategory(ajax_data){
     
         // Configuration options go here
         options: {
-            legend: {
-                display: false
-            },
+            // legend: {
+            //     display: false
+            // },
             animation: {
                 duration: 2000
             },

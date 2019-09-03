@@ -37,7 +37,7 @@
         </div>
         <div class="row">
             <div class="col-lg-6 mb-4">
-                @include('components.dashboard.households.todays_chart')
+                @include('components.dashboard.households.daily_chart_by_hour')
             </div>
             <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.custom_range_chart')
@@ -68,14 +68,14 @@
 
     {{-- charts --}}
     <script src="{{ asset('js/dashboard/expenses_by_category_chart.js') }}"></script>
-    <script src="{{ asset('js/dashboard/todays_chart.js') }}"></script>
+    <script src="{{ asset('js/dashboard/daily_chart_by_hours.js') }}"></script>
     <script src="{{ asset('js/dashboard/custom_range_chart.js') }}"></script>
     <script src="{{ asset('js/dashboard/year_chart.js') }}"></script>
 
     {{-- call monthly and todays chart fetch functions --}}
     <script>
         fetchMonthlyData({{ $household->id }}, (new Date()).getFullYear());
-        fetchTodaysData({{ $household->id }});
+        fetchDailyData({{ $household->id }});
         fetchCustomRangeData({{ $household->id }});
         fetchExpensesByCategoryData({{ $household->id }});
     </script>

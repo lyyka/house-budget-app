@@ -1,24 +1,32 @@
 $(document).ready(docReady);
 let daily_chart;
+let daily_chart_custom_day;
 
 function docReady(e){
-    todayDropdownChange();
-    $("#today_households_dropdown").on('change', todayDropdownChange);
+    dailyDropdownChange();
+    $("#daily_chart_households_dropdown").on('change', dailyDropdownChange);
+    $("#daily_chart_date_dropdown").on('change', dateChanged);
 }
 
-function todayDropdownChange(){
-    if(daily_chart != undefined){
-        daily_chart.destroy();
-    }
-    const household_id = $("#today_households_dropdown").val();
-    fetchTodaysData(household_id);
+function dateChanged(e){
+    daily_chart_custom_day = $(this).val();
+    fetchDailyData($("#household_id").val());
 }
 
-function fetchTodaysData(household_id){
+function dailyDropdownChange(){
+    const household_id = $("#daily_chart_households_dropdown").val();
+    fetchDailyData(household_id);
+}
+
+function fetchDailyData(household_id){
     if(household_id > 0){
+        let url = '/households/' + household_id + '/daily_data_by_hour';
+        if(daily_chart_custom_day != undefined){
+            url += '/' + daily_chart_custom_day;
+        }
         const req = $.ajax({
             type: "GET",
-            url: '/households/' + household_id + '/today_data',
+            url: url,
             async: true,
             cache: false,
         });
@@ -45,7 +53,10 @@ function fetchTodaysData(household_id){
 
 function initTodayChart(ajax_data){
     // init this month chart
-    const ctx = document.getElementById('today_chart').getContext('2d');
+    const ctx = document.getElementById('daily_chart_by_hours').getContext('2d');
+    if(daily_chart != undefined){
+        daily_chart.destroy();
+    }
     daily_chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',

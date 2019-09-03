@@ -29,7 +29,7 @@ Route::resource('users', 'UsersController', [
 Route::resource('households', 'HouseholdsController');
 // chart data collection
 Route::get('/households/{id}/{year}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');
-Route::get('/households/{id}/today_data', 'HouseholdsController@getTodaysData')->name('household.today');
+Route::get('/households/{id}/daily_data_by_hour/{day?}', 'HouseholdsController@getDailyDataByHour')->name('household.dailyByHour');
 Route::get('/households/{id}/custom_range', 'HouseholdsController@getCustomDataRange')->name('household.customRange');
 Route::get('/households/{id}/expenses_by_category', 'HouseholdsController@getExpensesByCategory')->name('household.byCategory');
 // go back and through expenses list by month

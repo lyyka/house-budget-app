@@ -30,10 +30,17 @@ function fetchExpense(id){
     }
 }
 
+function numberToMonthString(number){
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    return months[number];
+}
+
 function loadUpModal(expense, category){
     const name = expense.name;
     const amount = expense.amount;
-    const made_at = expense.expense_made_at;
+    const made_at_date = new Date(expense.expense_made_at);
+    
+    const made_at = (made_at_date.getDay() + 1) + ' ' + numberToMonthString(made_at_date.getMonth()) + ', ' + made_at_date.getFullYear() + ' at ' + made_at_date.getHours() + ':' + made_at_date.getMinutes();
     const category_name = category.name;
     const category_color = category.hex_color;
 

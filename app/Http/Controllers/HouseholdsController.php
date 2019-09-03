@@ -109,11 +109,20 @@ class HouseholdsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response JSON
      */
-    public function getTodaysData(Request $request, $id){
+    public function getDailyDataByHour(Request $request, $id, $day = null){
         $household = Household::findOrFail($id);
         if($household != null && $household->owner->id == Auth::id()){
 
-            $expenses = $household->fetchDayExpenses(date('d'), date('m'), date('Y'));
+            $display_day = date('d');
+            $display_month = date('m');
+            $display_year = date('Y');
+            if($day != null){
+                $carbon = \Carbon\Carbon::parse($day);
+                $display_day = $carbon->format('d');
+                $display_month = $carbon->format('m');
+                $display_year = $carbon->format('Y');
+            }
+            $expenses = $household->fetchDayExpenses($display_day, $display_month, $display_year);
 
             return response()->json([
                 'success' => true,
