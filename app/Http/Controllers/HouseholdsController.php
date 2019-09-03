@@ -316,7 +316,8 @@ class HouseholdsController extends Controller
             'currency' => 'required|integer|min:1|max:' . $currenices_count,
             'monthly_income' => 'required|integer',
             'expected_monthly_savings' => 'nullable|integer|min:0',
-            'budget_reset_day' => 'required|integer|min:1|max:31'
+            'budget_reset_day' => 'required|integer|min:1|max:31',
+            'allow_low_balance_emails' => 'nullable'
         ];
 
         $request->validate($validation);
@@ -330,6 +331,18 @@ class HouseholdsController extends Controller
                 $household->expected_monthly_savings = $request->input('expected_monthly_savings');
             }
             $household->budget_reset_day = $request->input('budget_reset_day');
+
+            // options
+            $current_options = $household->options; // load from db
+            if($current_options == null){ // if no options were previously set
+                $current_options = array(); // init empty array
+            }
+            else{
+                $current_options = json_decode($current_options); // convert from json to array
+            }
+
+            $current_options->allow_low_balance_emails = $request->input('allow_low_balance_emails') != null;
+            $household->options = json_encode($current_options); // convert from array to json and set it
             $household->save();
 
             toastr()->success('Household updated!');

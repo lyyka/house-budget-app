@@ -60,6 +60,15 @@
                         @enderror
                     </div>
                 </div>
+                <hr />
+                <h5>Other options:</h5>
+                @php
+                    $opts = json_decode($household->options);
+                @endphp
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" {{ $opts->allow_low_balance_emails != null && $opts->allow_low_balance_emails ? 'checked' : '' }} name="allow_low_balance_emails" id="allow_low_balance_emails">
+                    <label class="custom-control-label" for="allow_low_balance_emails">Notify me via email when balance of this household drops below 0 or below expected monthly savings</label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="px-3 py-1 bg-secondary text-white rounded shadow-sm border" data-dismiss="modal">Close</button>

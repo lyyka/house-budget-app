@@ -29,7 +29,10 @@ class HouseholdsObserver
         // check if the current state dropped low
         if($household->current_state <= 0 || $household->current_state <= $household->expected_monthly_savings){
             $email = $household->owner->email;
-            Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household));
+            $options = json_decode($household->options);
+            if($options != null && $options->allow_low_balance_emails){
+                Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household));
+            }
         }
     }
 
