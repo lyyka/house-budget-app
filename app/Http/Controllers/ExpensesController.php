@@ -92,6 +92,20 @@ class ExpensesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expense = \App\Expense::findOrFail($id);
+        if($expense != null & $expense->household->owner->id == Auth::id()){
+            if(date("m", strtotime($expense->expense_made_at)) == date("m")){
+                $expense->household->current_state += $expense->amount;
+                $expense->household->save();
+            }
+            $expense->delete();
+
+            toastr()->success('Expense removed');
+            return redirect()->back();
+        }
+        else{
+            toastr()->error('Error occured');
+            return redirect()->back();
+        }
     }
 }

@@ -5,11 +5,14 @@
             <a href="/households/{{ $household->id }}/expenses/prev_month" id="expense_table_prev" class="cursor-pointer text-dark">
                 <i class="fas fa-angle-left"></i>
             </a>
-            {{ $expense_list_current_date['month'] }}, {{ $expense_list_current_date['year'] }}
+            @php
+                $formatted_current_month = (DateTime::createFromFormat('!m', $expense_list_current_date['month']))->format("M");
+            @endphp
+            {{ $formatted_current_month }}, {{ $expense_list_current_date['year'] }}
             <a href="/households/{{ $household->id }}/expenses/next_month" id="expense_table_next" class="cursor-pointer text-dark">
                 <i class="fas fa-angle-right"></i>
             </a>
-            @if (date('M') != $expense_list_current_date['month'] || date("Y") != $expense_list_current_date['year'])
+            @if (date('M') != $formatted_current_month || date("Y") != $expense_list_current_date['year'])
                 <a href="/households/expenses/reset_expenses_list" class="cursor-pointer text-dark">
                     <i class="fas fa-sync-alt"></i>
                 </a>

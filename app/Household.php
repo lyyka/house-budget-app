@@ -99,14 +99,20 @@ class Household extends Model
         return $expenses;
     }
 
-    // fetches data only from the curren week
-    public function fetchCurrentWeekData(){
-        return DB::table('expenses')
-        ->select(DB::raw('DAYNAME(expense_made_at) as dayname'), DB::raw('SUM(amount) as total'))
+    // fetches data in defined range (by default fetches the current week)
+    public function fetchDataRange($range_start_date, $range_end_date){
+        $end_date = $range_end_date == null ? date("Y-m-d") : $range_end_date;
+        $start_date = $range_start_date == null ? \Carbon\Carbon::parse($end_date)->startOfWeek()->subDays(1) : $range_start_date;
+
+        $expenses = DB::table('expenses')
+        ->select(DB::raw('DATE(expense_made_at) as date'), DB::raw('SUM(amount) as total'))
         ->where('household_id', '=', $this->id)
-        ->where(DB::raw('WEEK(expense_made_at)'), '=', DB::raw('WEEK(NOW())'))
-        ->orderBy(DB::raw('DAYNAME(expense_made_at)'), 'desc')
-        ->groupBy(DB::raw('DAYNAME(expense_made_at)'))
+        ->where('expense_made_at', '>=', $start_date)
+        ->where('expense_made_at', '<=', $end_date)
+        ->groupBy(DB::raw('DATE(expense_made_at)'))
+        ->orderBy(DB::raw('DATE(expense_made_at)'), 'asc')
         ->get();
+
+        return $expenses;
     }
 }

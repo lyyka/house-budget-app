@@ -7,9 +7,6 @@ function docReady(e){
 }
 
 function expensesByCategoryDropdownChange(){
-    if(expenses_by_category_chart != undefined){
-        expenses_by_category_chart.destroy();
-    }
     const household_id = $("#expeneses_by_category_households_dropdown").val();
     fetchExpensesByCategoryData(household_id);
 }
@@ -49,6 +46,9 @@ function fetchExpensesByCategoryData(household_id){
 function initChartByCategory(ajax_data){
     // init this month chart
     const ctx = document.getElementById('categories_chart').getContext('2d');
+    if(expenses_by_category_chart != undefined){
+        expenses_by_category_chart.destroy();
+    }
     expenses_by_category_chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'bar',

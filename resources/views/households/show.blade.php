@@ -8,8 +8,9 @@
     <div class="container">
         <h1 class="text-center">{{ $household->name }}</h1>
         <h5 id="edit_household" class="text-info text-center mb-5 pb-5 cursor-pointer">
-            Edit
+            Settings
         </h5>
+        <input type="hidden" id="household_id" value="{{ $household->id }}" />
 
         {{-- modals --}}
         @include('components.dashboard.households.destroy_household')
@@ -39,7 +40,7 @@
                 @include('components.dashboard.households.todays_chart')
             </div>
             <div class="col-lg-6 mb-4">
-                @include('components.dashboard.households.current_week_chart')
+                @include('components.dashboard.households.custom_range_chart')
             </div>
         </div>
         <div class="mb-4">
@@ -68,14 +69,14 @@
     {{-- charts --}}
     <script src="{{ asset('js/dashboard/expenses_by_category_chart.js') }}"></script>
     <script src="{{ asset('js/dashboard/todays_chart.js') }}"></script>
-    <script src="{{ asset('js/dashboard/current_week_chart.js') }}"></script>
+    <script src="{{ asset('js/dashboard/custom_range_chart.js') }}"></script>
     <script src="{{ asset('js/dashboard/year_chart.js') }}"></script>
 
     {{-- call monthly and todays chart fetch functions --}}
     <script>
         fetchMonthlyData({{ $household->id }}, (new Date()).getFullYear());
         fetchTodaysData({{ $household->id }});
-        fetchCurrentWeeksData({{ $household->id }});
+        fetchCustomRangeData({{ $household->id }});
         fetchExpensesByCategoryData({{ $household->id }});
     </script>
 @endsection

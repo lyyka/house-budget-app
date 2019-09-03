@@ -5,17 +5,20 @@
 @endsection
 
 @section('content')
+    <div class="bg-white py-3 px-4 text-right">
+        <a href="/login" class="rounded shadow-sm border py-2 px-4 bg-info text-white mr-4">
+            Log In
+        </a>
+        <a href="/register" class="rounded shadow-sm border py-2 px-4 bg-success text-white">
+            Register
+        </a>
+    </div>
     <div class="py-5 position-relative" id="main_ribbon">
         <div class="position-absolute abs-center-middle bg-white p-4 rounded shadow-sm border">
             <h2 class="text-center">
                 Welcome to House Budget
             </h2>
-            <p class="text-center">Manage all you household expenses in one place!</p>
-            <div class="text-center">
-                <a href="/login" class="rounded shadow-sm border py-2 px-4 bg-success text-white">
-                    Log In
-                </a>
-            </div>
+            <p class="text-center">Manage all you household expenses in one place <br>and see detailed reports about them!</p>
         </div>
     </div>
 

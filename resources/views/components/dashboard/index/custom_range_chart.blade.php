@@ -6,12 +6,12 @@
             No households data
         </p>
     @else
-        <label for="current_week_households_dropdown">Household:</label>
-        <select id="current_week_households_dropdown" class="pr-2 border rounded">
+        <label for="custom_range_households_dropdown">Household:</label>
+        <select id="custom_range_households_dropdown" class="pr-2 border rounded">
             @foreach ($households as $household)
                 <option value="{{ $household->id }}">{{ $household->name }}</option>
             @endforeach
         </select>
-        <canvas class="d-block" id="current_week_chart"></canvas>
+        <canvas class="d-block" id="custom_range_chart"></canvas>
     @endif
 </div>

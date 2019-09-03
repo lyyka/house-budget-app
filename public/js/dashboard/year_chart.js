@@ -40,7 +40,15 @@ function fetchMonthlyData(household_id, year){
                 });
 
                 current_year = year;
-                $("#current_year_for_yearly_chart").text(current_year)
+                $("#current_year_for_yearly_chart").text(current_year);
+                if(current_year != (new Date()).getFullYear()){
+                    $("#refresh_yearly_chart").removeClass('d-none');
+                    $("#refresh_yearly_chart").addClass('d-inline');
+                }
+                else{
+                    $("#refresh_yearly_chart").removeClass('d-inline');
+                    $("#refresh_yearly_chart").addClass('d-none');
+                }
 
                 const ajax_data = {
                     labels: labels,

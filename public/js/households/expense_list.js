@@ -24,8 +24,6 @@ function fetchExpense(id){
             if(success){
                 const expense = data.expense_data;
                 const category = data.expense_category;
-                console.log(category);
-                
                 loadUpModal(expense, category);
             }
         });
@@ -44,6 +42,7 @@ function loadUpModal(expense, category){
     $("#exp_made_at").text(made_at);
     $("#exp_category_color_circle").css('background-color', "#" + category_color);
     $("#exp_category_name").text(category_name);
+    $("#del_expense_form").attr('action', '/expenses/' + expense.id);
 
     $("#expenseShowModal").modal('show');
 }

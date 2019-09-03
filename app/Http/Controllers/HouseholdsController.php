@@ -17,7 +17,6 @@ class HouseholdsController extends Controller
     // EXPENSES LIST BACK AND FORTH WITH THE MONTHS
     public function resetExpensesList(Request $request){
         Session::forget('expense_list_view_year');
-        Session::forget('expense_list_view_month_string');
         Session::forget('expense_list_view_month');
 
         return redirect()->back();
@@ -26,10 +25,8 @@ class HouseholdsController extends Controller
     // changes session variables for expenses list
     public function goThroughTimeForExpensesList($household, $interval){
         if(!Session::has('expense_list_view_year') &&
-        !Session::has('expense_list_view_month_string') &&
         !Session::has('expense_list_view_month')){
             Session::put('expense_list_view_year', date("Y"));
-            Session::put('expense_list_view_month_string', date("M"));
             Session::put('expense_list_view_month', date("m"));
         }
 
@@ -39,7 +36,6 @@ class HouseholdsController extends Controller
         $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
         $modified = $datetime->modify($interval);
 
-        Session::put('expense_list_view_month_string', $modified->format('M'));
         Session::put('expense_list_view_month', $modified->format('m'));
         Session::put('expense_list_view_year', $modified->format('Y'));
     }
@@ -69,52 +65,6 @@ class HouseholdsController extends Controller
             return redirect()->back()->with('error', 'Access denied');
         }
     }
-
-    // // yearly chart
-    // public function resetYearlyChartYear(Request $request){
-    //     Session::forget('yearly_chart_year');
-
-    //     return redirect()->back();
-    // }
-
-    // public function goThroughTimeForYearlyChart($household, $interval){
-    //     if(!Session::has('yearly_chart_year')){
-    //         Session::put('yearly_chart_year', date("Y"));
-    //     }
-        
-    //     $current_view_year = Session::get('expense_list_view_year');
-
-    //     $datetime = new \DateTime($current_view_year);
-    //     $modified = $datetime->modify($interval);
-
-    //     Session::put('yearly_chart_year', $modified->format('Y'));
-    // }
-
-    // // gets data from previous year (previous year from one stored in session)
-    // public function loadExpensesFromPrevYear(Request $request, $id){
-    //     $household = \App\Household::findOrFail($id);
-    //     if($household != null && $household->owner->id == Auth::id()){
-    //         $this->goThroughTimeForYearlyChart($household, "-1 year");
-
-    //         return redirect()->back();
-    //     }
-    //     else{
-    //         return redirect()->back()->with('error', 'Access denied');
-    //     }
-    // }
-
-    // // gets year from next year (next year from one stored in session)
-    // public function loadExpensesFromNextYear(Request $request, $id){
-    //     $household = \App\Household::findOrFail($id);
-    //     if($household != null && $household->owner->id == Auth::id()){
-    //         $this->goThroughTimeForYearlyChart($household, "+1 year");
-
-    //         return redirect()->back();
-    //     }
-    //     else{
-    //         return redirect()->back()->with('error', 'Access denied');
-    //     }
-    // }
     
     // return expenses grouped by category
     public function getExpensesByCategory(Request $request, $id){
@@ -133,12 +83,14 @@ class HouseholdsController extends Controller
         }
     }
 
-    // returns current week data
-    public function getCurrentWeekData(Request $request, $id){
+    // returns custom data range (by default returns this week only)
+    public function getCustomDataRange(Request $request, $id){
         $household = Household::findOrFail($id);
         if($household != null && $household->owner->id == Auth::id()){
 
-            $expenses = $household->fetchCurrentWeekData();
+            $query_start_date = $request->query('start');
+            $query_end_date = $request->query('end');
+            $expenses = $household->fetchDataRange($query_start_date, $query_end_date);
 
             return response()->json([
                 'success' => true,
@@ -281,10 +233,8 @@ class HouseholdsController extends Controller
         if($household != null && $household->user_id == Auth::id()){
             // viewing month for expenses table
             if(!Session::has('expense_list_view_year') &&
-            !Session::has('expense_list_view_month_string') &&
             !Session::has('expense_list_view_month')){
                 Session::put('expense_list_view_year', date("Y"));
-                Session::put('expense_list_view_month_string', date("M"));
                 Session::put('expense_list_view_month', date("m"));
             }
 
@@ -317,7 +267,7 @@ class HouseholdsController extends Controller
                 'monthly_income' => $monthly_income, // monthly income that is household.monthly_incom + each memebrs additional income
                 'expense_categories' => $categories, // categories for expense form
                 'expense_list_current_date' => [
-                    'month' => Session::get('expense_list_view_month_string'),
+                    'month' => Session::get('expense_list_view_month'),
                     'year' => Session::get('expense_list_view_year')
                 ], // current date to show above expense list
             ];
