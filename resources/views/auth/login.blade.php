@@ -13,17 +13,21 @@
                 <form method="POST" action="{{ route("login") }}">
                     @csrf
                     
-                    <label for="email" class="d-block">Email:</label>
-                    <input id="email" type="email" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter your email address" />
-                    @error('email')
-                        <label class = "d-block text-danger">{{ $message }}</label>
-                    @enderror
+                    <div class="mb-4">
+                        <label for="email" class="d-block">Email:</label>
+                        <input id="email" type="email" class="w-100 rounded shadow-sm border py-2 px-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter your email address" />
+                        @error('email')
+                            <label class = "d-block text-danger">{{ $message }}</label>
+                        @enderror
+                    </div>
         
-                    <label for="password" class="d-block">Password:</label>
-                    <input id="password" type="password" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Enter your password here" />
-                    @error('password')
-                        <label class = "d-block text-danger">{{ $message }}</label>
-                    @enderror
+                    <div class="mb-4">
+                        <label for="password" class="d-block">Password:</label>
+                        <input id="password" type="password" class="w-100 rounded shadow-sm border py-2 px-3 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Enter your password here" />
+                        @error('password')
+                            <label class = "d-block text-danger">{{ $message }}</label>
+                        @enderror
+                    </div>
         
                     {{-- <hr /> --}}
         
@@ -41,11 +45,11 @@
     
                     <p class="m-0">
                         Don't have an account?
-                        <a href="/register">
+                        <a href="/register" class="text-info">
                             Register!
                         </a>
                     </p>
-                    <a href="{{ route('password.request') }}">
+                    <a href="{{ route('password.request') }}" class="text-info">
                         Forgot Your Password?
                     </a>
                 </form> 
