@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Household;
+use Illuminate\Support\Facades\Mail;
 
 class HouseholdsObserver
 {
@@ -25,7 +26,11 @@ class HouseholdsObserver
      */
     public function updated(Household $household)
     {
-        //
+        // check if the current state dropped low
+        if($household->current_state <= 0 || $household->current_state <= $household->expected_monthly_savings){
+            $email = $household->owner->email;
+            Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household));
+        }
     }
 
     /**

@@ -7,9 +7,12 @@
 @section('content')
     <div class="container">
         <h1 class="text-center">{{ $household->name }}</h1>
-        <h5 id="edit_household" class="text-info text-center mb-5 pb-5 cursor-pointer">
-            Settings
-        </h5>
+        <div class="text-center">
+            <h5 id="edit_household" class="text-info mb-5 pb-5 cursor-pointer d-inline-block">
+                <i class="fas fa-cogs"></i>
+                Settings
+            </h5>
+        </div>
         <input type="hidden" id="household_id" value="{{ $household->id }}" />
 
         {{-- modals --}}

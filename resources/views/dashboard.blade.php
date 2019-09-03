@@ -9,7 +9,7 @@
             @include('components.dashboard.index.quick_households')
         </div>
         <div class="col-lg-6 mb-5">
-            @include('components.dashboard.index.daily_chart_by_hour.blade')
+            @include('components.dashboard.index.daily_chart_by_hour')
         </div>
     </div>
     <div class="row">
@@ -20,7 +20,9 @@
             @include('components.dashboard.index.monthly_overview')
         </div>
     </div>
-    @include('components.dashboard.index.categories_chart')
+    <div class="mb-5">
+        @include('components.dashboard.index.categories_chart')
+    </div>
 </div>
 @endsection
 
