@@ -249,7 +249,7 @@ class HouseholdsController extends Controller
             }
 
             // get all expenses
-            $expenses = $household->fetchExpenses(null, Session::get('expense_list_view_month'), Session::get('expense_list_view_year'))->orderBy('expense_made_at', 'desc');
+            $expenses = $household->fetchExpenses(null, Session::get('expense_list_view_month'), Session::get('expense_list_view_year'))->orderBy('created_at', 'desc');
 
             $total_monthly_expenses = 0;
             foreach ($expenses->get() as $expense) {

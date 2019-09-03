@@ -30,7 +30,7 @@ class ExpensesTableSeeder extends Seeder
             $expense->category_id = rand(1, 9);
             $expense->name = 'Expense ' . ($i + 1);
             $expense->amount = rand(100, 5000);
-            $expense->expense_made_at = $date_string;
+            $expense->created_at = $date_string;
             $expense->save();
         }
     }

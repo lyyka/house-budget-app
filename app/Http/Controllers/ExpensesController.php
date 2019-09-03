@@ -54,7 +54,7 @@ class ExpensesController extends Controller
             $expense->category_id = $request->input('category_id');
             $expense->name = $request->input('name');
             $expense->amount = $request->input('amount');
-            $expense->expense_made_at = date("Y-m-d H:i:s");
+            $expense->created_at = date("Y-m-d H:i:s");
             $expense->save();
 
             $household->current_state -= $expense->amount;
@@ -95,7 +95,7 @@ class ExpensesController extends Controller
         $expense = \App\Expense::findOrFail($id);
         if($expense != null & $expense->household->owner->id == Auth::id()){
             if(Auth::user()->hasVerifiedEmail()){
-                if(date("m", strtotime($expense->expense_made_at)) == date("m")){
+                if(date("m", strtotime($expense->created_at)) == date("m")){
                     $expense->household->current_state += $expense->amount;
                     $expense->household->save();
                 }

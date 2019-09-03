@@ -43,13 +43,13 @@ class Household extends Model
     public function fetchExpenses($day = null, $month = null, $year = null){
         $expenses = $this->expenses();
         if($day != null){
-            $expenses = $expenses->whereDay('expense_made_at', '=', $day);
+            $expenses = $expenses->whereDay('created_at', '=', $day);
         }
         if($month != null){
-            $expenses = $expenses->whereMonth('expense_made_at', '=', $month);
+            $expenses = $expenses->whereMonth('created_at', '=', $month);
         }
         if($year != null){
-            $expenses = $expenses->whereYear('expense_made_at', '=', $year);
+            $expenses = $expenses->whereYear('created_at', '=', $year);
         }
         return $expenses;
     }
@@ -57,24 +57,24 @@ class Household extends Model
     // gets expenses BY HOUR in a given day in a given month in a given year
     public function fetchDayExpenses($day, $month, $year){
         return DB::table('expenses')
-        ->select(DB::raw('sum(amount) as total'), DB::raw('HOUR(expense_made_at) as hour'))
+        ->select(DB::raw('sum(amount) as total'), DB::raw('HOUR(created_at) as hour'))
         ->where('household_id', '=', $this->id)
-        ->whereDay('expense_made_at', '=', $day)
-        ->whereMonth('expense_made_at', '=', $month)
-        ->whereYear('expense_made_at', '=', $year)
-        ->orderBy(DB::raw('HOUR(expense_made_at)'), 'asc')
-        ->groupBy(DB::raw('HOUR(expense_made_at)'))
+        ->whereDay('created_at', '=', $day)
+        ->whereMonth('created_at', '=', $month)
+        ->whereYear('created_at', '=', $year)
+        ->orderBy(DB::raw('HOUR(created_at)'), 'asc')
+        ->groupBy(DB::raw('HOUR(created_at)'))
         ->get();
     }
 
     // gets expenses BY MONTH in given YEAR
     public function fetchMonthlyExpenses($year){
         return DB::table('expenses')
-        ->select(DB::raw('sum(amount) as total'), DB::raw('MONTH(expense_made_at) as month'))
+        ->select(DB::raw('sum(amount) as total'), DB::raw('MONTH(created_at) as month'))
         ->where('household_id', '=', $this->id)
-        ->whereYear('expense_made_at', '=', $year)
-        ->orderBy(DB::raw('MONTH(expense_made_at)'), 'asc')
-        ->groupBy(DB::raw('MONTH(expense_made_at)'))
+        ->whereYear('created_at', '=', $year)
+        ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
+        ->groupBy(DB::raw('MONTH(created_at)'))
         ->get();
     }
 
@@ -84,13 +84,13 @@ class Household extends Model
         ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
         ->where('household_id', '=', $this->id);
         if($day != null){
-            $expenses = $expenses->whereDay('expense_made_at', '=', $day);
+            $expenses = $expenses->whereDay('created_at', '=', $day);
         }
         if($month != null){
-            $expenses = $expenses->whereMonth('expense_made_at', '=', $month);
+            $expenses = $expenses->whereMonth('created_at', '=', $month);
         }
         if($year != null){
-            $expenses = $expenses->whereYear('expense_made_at', '=', $year);
+            $expenses = $expenses->whereYear('created_at', '=', $year);
         }
         $expenses = $expenses->leftJoin('expense_categories', 'expenses.category_id', '=', 'expense_categories.id')
         ->groupBy('category_id')
@@ -105,12 +105,12 @@ class Household extends Model
         $start_date = $range_start_date == null ? \Carbon\Carbon::parse($end_date)->startOfWeek()->subDays(1) : $range_start_date;
 
         $expenses = DB::table('expenses')
-        ->select(DB::raw('DATE(expense_made_at) as date'), DB::raw('SUM(amount) as total'))
+        ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
         ->where('household_id', '=', $this->id)
-        ->where('expense_made_at', '>=', $start_date)
-        ->where('expense_made_at', '<=', $end_date)
-        ->groupBy(DB::raw('DATE(expense_made_at)'))
-        ->orderBy(DB::raw('DATE(expense_made_at)'), 'asc')
+        ->where('created_at', '>=', $start_date)
+        ->where('created_at', '<=', $end_date)
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderBy(DB::raw('DATE(created_at)'), 'asc')
         ->get();
 
         return $expenses;

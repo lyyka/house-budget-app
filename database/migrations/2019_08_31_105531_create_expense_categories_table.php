@@ -18,7 +18,6 @@ class CreateExpenseCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('hex_color');
-            $table->timestamps();
         });
     }
 
