@@ -56,7 +56,18 @@
                 </div>
                 <div class="col-lg-6 mb-4">
                     <label for="budget_reset_day" class="d-block">When is the budget reset? <span class="text-info">*</span></label>
-                    <input id="budget_reset_day" type="number" min="1" max="31" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" name="budget_reset_day" value="{{ old('budget_reset_day') }}" required placeholder="When will the budget be reset to total monthly income?" />
+                    <select name="budget_reset_day" id="budget_reset_day" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" required>
+                        @php
+                            $locale = app()->getLocale();
+                            $nf = new NumberFormatter($locale, NumberFormatter::ORDINAL);
+                        @endphp
+                        @for ($i = 1; $i <= 31; $i++)
+                            <option value = "{{ $i }}" {{ old('budget_reset_day') == $i ? 'selected' : '' }} >
+                                {{ $nf->format($i) }} every month
+                            </option>
+                        @endfor
+                    </select>
+                    {{-- <input id="budget_reset_day" type="number" min="1" max="31" class="w-100 rounded shadow-sm border py-2 px-3 @error('budget_reset_day') is-invalid @enderror" name="budget_reset_day" value="{{ old('budget_reset_day') }}" required placeholder="When will the budget be reset to total monthly income?" /> --}}
                     @error('budget_reset_day')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
