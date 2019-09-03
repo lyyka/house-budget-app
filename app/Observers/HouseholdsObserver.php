@@ -30,7 +30,7 @@ class HouseholdsObserver
         if($household->current_state <= 0 || $household->current_state <= $household->expected_monthly_savings){
             $email = $household->owner->email;
             $options = json_decode($household->options);
-            if($options != null && $options->allow_low_balance_emails){
+            if($options != null && $options->allow_low_balance_emails && $household->owner->hasEmailVerified()){
                 Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household));
             }
         }
@@ -44,15 +44,7 @@ class HouseholdsObserver
      */
     public function deleted(Household $household)
     {
-        $expenses = $household->expenses;
-        foreach ($expenses as $expense) {
-            $expense->delete();
-        }
-
-        $members = $household->members;
-        foreach ($members as $member) {
-            $member->delete();
-        }
+        //
     }
 
     /**

@@ -94,18 +94,22 @@ class ExpensesController extends Controller
     {
         $expense = \App\Expense::findOrFail($id);
         if($expense != null & $expense->household->owner->id == Auth::id()){
-            if(date("m", strtotime($expense->expense_made_at)) == date("m")){
-                $expense->household->current_state += $expense->amount;
-                $expense->household->save();
-            }
-            $expense->delete();
+            if(Auth::user()->hasVerifiedEmail()){
+                if(date("m", strtotime($expense->expense_made_at)) == date("m")){
+                    $expense->household->current_state += $expense->amount;
+                    $expense->household->save();
+                }
+                $expense->delete();
 
-            toastr()->success('Expense removed');
-            return redirect()->back();
+                toastr()->success('Expense removed');
+            }
+            else{
+                toastr()->error('Please verify your email address first');
+            }
         }
         else{
             toastr()->error('Error occured');
-            return redirect()->back();
         }
+        return redirect()->back();
     }
 }

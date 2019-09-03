@@ -14,7 +14,7 @@ class AddOptionsColToHouseholdsTable extends Migration
     public function up()
     {
         Schema::table('households', function (Blueprint $table) {
-            $table->json('options')->nullalbe();
+            $table->json('options')->nullable();
         });
     }
 

@@ -34,5 +34,13 @@
                 Update
             </button>
         </form> 
+        <hr />
+        <form action="/users/{{ Auth::id() }}" method="POST" class="text-center">
+            @csrf
+            @method("DELETE")
+            <button type="submit" class="border-0 text-muted bg-transparent">
+                Deactivate account
+            </button>
+        </form>
     </div>
 @endsection

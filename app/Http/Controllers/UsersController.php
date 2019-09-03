@@ -84,6 +84,25 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if($id == Auth::id()){
+            if(Auth::user()->hasVerifiedEmail()){
+                // destroy
+                $user->delete();
+
+                // log out
+                Auth::logout();
+
+                toastr()->success('Account has been deactiavted');
+                return redirect('/');
+            }
+            else{
+                toastr()->error('Please verify your email address first');
+                return redirect()->back();
+            }
+        }
+        else{
+            toastr()->error('Access denied');
+            return redirect()->back();
+        }
     }
 }

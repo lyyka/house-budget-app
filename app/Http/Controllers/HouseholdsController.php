@@ -223,6 +223,7 @@ class HouseholdsController extends Controller
             $household->current_state = $request->input('monthly_income');
         }
         $household->budget_reset_day = $request->input('budget_reset_day');
+        $household->options = null;
         $household->save();
 
         toastr()->success('Household created!');
@@ -335,7 +336,7 @@ class HouseholdsController extends Controller
             // options
             $current_options = $household->options; // load from db
             if($current_options == null){ // if no options were previously set
-                $current_options = array(); // init empty array
+                $current_options = json_decode("{}"); // init empty array
             }
             else{
                 $current_options = json_decode($current_options); // convert from json to array
@@ -366,10 +367,16 @@ class HouseholdsController extends Controller
     {
         $household = \App\Household::findOrFail($id);
         if($household != null && $household->owner->id == Auth::id()){
-            $household->delete();
+            if(Auth::user()->hasVerifiedEmail()){
+                $household->delete();
 
-            toastr()->success('Household removed!');
-            return redirect('/dashboard');
+                toastr()->success('Household removed!');
+                return redirect('/dashboard');
+            }
+            else{
+                toastr()->error('Please verify your email address first');
+                return redirect()->back();
+            }
         }
         else{
             toastr()->error('Household not found!');
