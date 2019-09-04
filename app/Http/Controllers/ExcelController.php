@@ -91,7 +91,7 @@ class ExcelController extends Controller
         if(Session::has($name)){
             $export = new ExpensesExport(Session::get($name));
             Session::forget($name);
-            return Excel::download($export, 'Expense Report Generated ' . date("Y-m-d") . '.xlsx');
+            return Excel::download($export, 'Expense Report Generated On ' . date("Y-m-d") . '.xlsx');
         }
         else{
             abort(404, "File you are looking for is expired");

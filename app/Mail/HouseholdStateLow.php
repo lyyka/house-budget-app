@@ -13,15 +13,17 @@ class HouseholdStateLow extends Mailable
     use Queueable, SerializesModels;
 
     public $household;
+    public $path_to_report;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Household $household)
+    public function __construct(Household $household, $path_to_report)
     {
         $this->household = $household;
+        $this->path_to_report = $path_to_report;
     }
 
     /**
@@ -31,6 +33,7 @@ class HouseholdStateLow extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.household.state_low');
+        return $this->markdown('emails.household.state_low')
+        ->attachFromStorage($this->path_to_report);
     }
 }

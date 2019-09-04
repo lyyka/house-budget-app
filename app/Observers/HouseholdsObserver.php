@@ -4,6 +4,11 @@ namespace App\Observers;
 
 use App\Household;
 use Illuminate\Support\Facades\Mail;
+use Storage;
+
+use Maatwebsite\Excel\Facades\Excel;
+// export
+use App\Exports\ExpensesExport;
 
 class HouseholdsObserver
 {
@@ -30,8 +35,22 @@ class HouseholdsObserver
         if($household->current_state <= 0 || $household->current_state <= $household->expected_monthly_savings){
             $email = $household->owner->email;
             $options = json_decode($household->options);
-            if($options != null && $options->allow_low_balance_emails && $household->owner->hasEmailVerified()){
-                Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household));
+            if($options != null && $options->allow_low_balance_emails && $household->owner->email_verified_at != null){
+                // generate excel file with current month expenses to email to user as an attachment
+                $expenses = $household->expenses()
+                ->whereMonth('created_at', '=', date("m"))
+                ->whereYear('created_at', '=' , date("Y"))
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+                $export = new ExpensesExport($expenses);
+                $filename = 'Expense Report Generated On ' . date("Y-m-d") . '.xlsx';
+                $path = '/storage/excel_exports/' . $filename;
+                Excel::store($export, $path);
+
+                Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household, $path));
+
+                Storage::delete($path);
             }
         }
     }
