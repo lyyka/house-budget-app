@@ -26,7 +26,7 @@ class ExpensesTableSeeder extends Seeder
             $date_string = date('Y-m-d H:i:s', $timestamp);
  
             $expense = new Expense();
-            $expense->household_id = 3;
+            $expense->household_id = 1;
             $expense->category_id = rand(1, 9);
             $expense->name = 'Expense ' . ($i + 1);
             $expense->amount = rand(100, 5000);

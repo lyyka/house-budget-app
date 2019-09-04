@@ -5,7 +5,7 @@
     </p>
     <input type="date" id="custom_range_start" placeholder="Start date" class="rounded border shadow-sm" />
     <i class="fas fa-exchange-alt mx-2"></i>
-    <input type="date" id="custom_range_end" placeholder="Start date" class="rounded border shadow-sm" />
+    <input type="date" id="custom_range_end" max="{{ date("Y-m-d") }}" placeholder="Start date" class="rounded border shadow-sm" />
     <hr />
     <canvas id = "custom_range_chart"></canvas>
 </div>

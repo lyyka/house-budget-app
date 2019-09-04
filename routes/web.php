@@ -43,6 +43,11 @@ Route::resource('expenses', 'ExpensesController', [
 ]);
 Route::get('/expenses/{id}/getData', 'ExpensesController@fetchExpense');
 
+// excel exports/imports
+Route::post('/excel/export', 'ExcelController@export')->name('excel.export');
+Route::post('/excel/import', 'ExcelController@import')->name('excel.import');
+Route::get('/excel/download/{id}', 'ExcelController@download')->name('excel.download');
+
 // members
 Route::resource('members', 'MembersController', [
     'only' => ['store', 'edit', 'update', 'destroy']

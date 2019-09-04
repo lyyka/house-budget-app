@@ -11,17 +11,22 @@
             <div class="modal-body">
                 @csrf
                 <input type="hidden" name="household_id" value = {{ $household->id }} />
-                <label for="name" class="d-block">Expense title:</label>
-                <input id="name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required autofocus placeholder="Describe the expense" value = "{{ old('name') }}" />
-                @error('name')
-                    <label class = "d-block text-danger">{{ $message }}</label>
-                @enderror
+                <div class="mb-4">
+                    <label for="name" class="d-block">Expense title:</label>
+                    <input id="name" type="text" class="w-100 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required autofocus placeholder="Describe the expense" value = "{{ old('name') }}" />
+                    @error('name')
+                        <label class = "d-block text-danger">{{ $message }}</label>
+                    @enderror
+                </div>
         
-                <label for="amount" class="d-block">Amount:</label>
-                <input id="amount" type="number" min="1" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required autofocus placeholder="How much did you spend?" value = "{{ old('amount') }}" />
-                @error('amount')
-                    <label class = "d-block text-danger">{{ $message }}</label>
-                @enderror
+                <div class="mb-4">
+                    <label for="amount" class="d-block">Amount:</label>
+                    <input id="amount" type="number" min="1" class="w-100 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required autofocus placeholder="How much did you spend?" value = "{{ old('amount') }}" />
+                    <label class="text-muted">{{ $household->currency->currency_short }}</label>
+                    @error('amount')
+                        <label class = "d-block text-danger">{{ $message }}</label>
+                    @enderror
+                </div>
         
                 <label for="category" class="d-block">Category:</label>
                 <input type="hidden" name="category_id" id="category" />
@@ -47,8 +52,6 @@
                 @error('category_id')
                     <label class = "d-block text-danger">{{ $message }}</label>
                 @enderror
-        
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="px-3 py-1 bg-secondary text-white rounded shadow-sm border" data-dismiss="modal">Close</button>

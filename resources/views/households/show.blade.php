@@ -16,11 +16,12 @@
         <input type="hidden" id="household_id" value="{{ $household->id }}" />
 
         {{-- modals --}}
-        @include('components.dashboard.households.destroy_household')
-        @include('components.dashboard.households.edit_household')
-        @include('components.dashboard.households.display_expense')
-        @include('components.dashboard.households.add_expense')
-        @include('components.dashboard.households.add_member')
+        @include('components.dashboard.households.modals.export_to_xlsx')
+        @include('components.dashboard.households.modals.destroy_household')
+        @include('components.dashboard.households.modals.edit_household')
+        @include('components.dashboard.households.modals.display_expense')
+        @include('components.dashboard.households.modals.add_expense')
+        @include('components.dashboard.households.modals.add_member')
 
         <div class="row">
             <div class="col-lg-6 mb-4">
@@ -60,6 +61,9 @@
 @endsection
 
 @section('scripts')
+    {{-- excel to get file AJAX --}}
+    <script src="{{ asset('js/households/export_to_excel.js') }}"></script>
+
     {{-- edit household button --}}
     <script src="{{ asset('js/households/edit_household.js') }}"></script>
 

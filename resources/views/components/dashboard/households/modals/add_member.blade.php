@@ -28,11 +28,14 @@
                         </div>
                     </div>
             
-                    <label for="additional_income" class="d-block">Additional Income (optional):</label>
-                    <input id="additional_income" type="number" min="0" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
-                    @error('additional_income')
-                        <label class = "d-block text-danger">{{ $message }}</label>
-                    @enderror
+                    <div class="mb-4">
+                        <label for="additional_income" class="d-block">Additional Income (optional):</label>
+                        <input id="additional_income" type="number" min="0" class="w-100 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
+                        <label class="text-muted">{{ $household->currency->currency_short }}</label>
+                        @error('additional_income')
+                            <label class = "d-block text-danger">{{ $message }}</label>
+                        @enderror
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="px-3 py-1 bg-secondary text-white rounded shadow-sm border" data-dismiss="modal">Close</button>
