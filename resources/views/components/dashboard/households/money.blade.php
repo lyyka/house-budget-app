@@ -28,7 +28,7 @@
         <i class="fas fa-file-export"></i>
         Export to Excel
     </button>
-    <button type="button" class="mb-2 py-1 px-3 bg-success text-white rounded shadow-sm border">
+    <button type="button" class="mb-2 py-1 px-3 bg-success text-white rounded shadow-sm border" data-toggle="modal" data-target="#importDataFromXlsxModal">
         <i class="fas fa-file-upload"></i>
         Import from Excel
     </button>

@@ -16,6 +16,7 @@
         <input type="hidden" id="household_id" value="{{ $household->id }}" />
 
         {{-- modals --}}
+        @include('components.dashboard.households.modals.import_from_xlsx')
         @include('components.dashboard.households.modals.export_to_xlsx')
         @include('components.dashboard.households.modals.destroy_household')
         @include('components.dashboard.households.modals.edit_household')
@@ -61,8 +62,11 @@
 @endsection
 
 @section('scripts')
-    {{-- excel to get file AJAX --}}
-    <script src="{{ asset('js/households/export_to_excel.js') }}"></script>
+    @if (Auth::user()->hasVerifiedEmail())
+        <script src="{{ asset('js/households/import_from_excel.js') }}"></script>
+        {{-- excel to get file AJAX --}}
+        <script src="{{ asset('js/households/export_to_excel.js') }}"></script>
+    @endif
 
     {{-- edit household button --}}
     <script src="{{ asset('js/households/edit_household.js') }}"></script>

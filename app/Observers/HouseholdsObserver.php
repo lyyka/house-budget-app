@@ -44,8 +44,8 @@ class HouseholdsObserver
                 ->get();
 
                 $export = new ExpensesExport($expenses);
-                $filename = 'Expense Report Generated On ' . date("Y-m-d") . '.xlsx';
-                $path = '/storage/excel_exports/' . $filename;
+                $filename = 'Expense Report Generated On ' . date("Y-m-d") . ' - ' . uniqid() . '.xlsx';
+                $path = '/excel/exports' . $filename;
                 Excel::store($export, $path);
 
                 Mail::to($email)->send(new \App\Mail\HouseholdStateLow($household, $path));

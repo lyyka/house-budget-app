@@ -83,7 +83,14 @@ class ExcelController extends Controller
     }
 
     public function import(Request $request){
+        if($request->hasFile('excel_import_table')){
+            $file = $request->file('excel_import_table');
 
+        }
+        else{
+            toastr()->error('No file selected');
+            return redirect()->back();
+        }
     }
 
     public function download(Request $request, $download_id){
