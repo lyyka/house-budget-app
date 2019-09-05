@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expense extends Model
 {
+    protected $fillable = [
+        'household_id', 'name', 'amount', 'category_id',
+    ];
     // Table Name
     protected $table = 'expenses';
     // Primary Key

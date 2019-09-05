@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 // export
 use App\Exports\ExpensesExport;
+// import
+use App\Imports\ExpensesImport;
 
 class ExcelController extends Controller
 {
@@ -18,7 +20,7 @@ class ExcelController extends Controller
 
     public function export(Request $request){
         $rules = [
-            'household_id' => 'required|integer|min:1',
+            'household_id' => 'required|integer|min:1|exists:households,id',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|before_or_equal:' . date("Y-m-d"),
             'export_categories.*' => 'nullable|string|exists:expense_categories,name',
@@ -83,12 +85,29 @@ class ExcelController extends Controller
     }
 
     public function import(Request $request){
-        if($request->hasFile('excel_import_table')){
-            $file = $request->file('excel_import_table');
+        $request->validate([
+            'excel_import_table' => 'required|mimes:xlsx|max:5120',
+            'household_id' => 'required|integer|min:1|exists:households,id'
+        ]);
 
+        $household = \App\Household::findOrFail($request->input('household_id'));
+
+        if($household != null && $household->owner->id == Auth::id()){
+            if($request->hasFile('excel_import_table')){
+                $file = $request->file('excel_import_table');
+                $import = new ExpensesImport($household);
+                Excel::import($import, $file);
+
+                toastr()->success('Expenses imported successfully');
+                return redirect()->back();
+            }
+            else{
+                toastr()->error('No file selected');
+                return redirect()->back();
+            }
         }
         else{
-            toastr()->error('No file selected');
+            toastr()->error('You can not import to this household');
             return redirect()->back();
         }
     }

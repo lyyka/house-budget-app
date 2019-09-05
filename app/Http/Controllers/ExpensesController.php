@@ -40,7 +40,7 @@ class ExpensesController extends Controller
             'name' => 'required|string|max:191',
             'amount' => 'required|numeric|min:1',
             'category_id' => 'required|integer|min:1',
-            'household_id' => 'required|integer|min:1'
+            'household_id' => 'required|integer|min:1|exists:households,id'
         ];
 
         $request->validate($validation);
@@ -57,8 +57,8 @@ class ExpensesController extends Controller
             $expense->created_at = date("Y-m-d H:i:s");
             $expense->save();
 
-            $household->current_state -= $expense->amount;
-            $household->save();
+            // $household->current_state -= $expense->amount;
+            // $household->save();
 
             toastr()->success('Expenses added');
             return redirect()->back();
@@ -95,10 +95,10 @@ class ExpensesController extends Controller
         $expense = \App\Expense::findOrFail($id);
         if($expense != null & $expense->household->owner->id == Auth::id()){
             if(Auth::user()->hasVerifiedEmail()){
-                if(date("m", strtotime($expense->created_at)) == date("m")){
-                    $expense->household->current_state += $expense->amount;
-                    $expense->household->save();
-                }
+                // if(date("m", strtotime($expense->created_at)) == date("m")){
+                //     $expense->household->current_state += $expense->amount;
+                //     $expense->household->save();
+                // }
                 $expense->delete();
 
                 toastr()->success('Expense removed');

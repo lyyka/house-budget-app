@@ -8,6 +8,9 @@ use App\Observers\HouseholdsObserver;
 use App\HouseholdMember;
 use App\Observers\HouseholdMemberObserver;
 
+use App\Expense;
+use App\Observers\ExpensesObserver;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -34,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
         
         Household::observe(HouseholdsObserver::class);
         HouseholdMember::observe(HouseholdMemberObserver::class);
+        Expense::observe(ExpensesObserver::class);
     }
 }
