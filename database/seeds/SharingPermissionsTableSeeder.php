@@ -15,12 +15,14 @@ class SharingPermissionsTableSeeder extends Seeder
         $permissions = [
             'Add members',
             'View members',
+            'Edit members',
+            'Delete members',
             'Add expenses',
             'View expenses',
             'View charts',
+            'View household balance',
             'Share with other people',
             'Edit household',
-            'View household balance',
             'Delete household'
         ];
         foreach($permissions as $perm){

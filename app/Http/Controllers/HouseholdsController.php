@@ -43,7 +43,7 @@ class HouseholdsController extends Controller
     // gets expenses from previous month (previous month from one stored in session)
     public function loadExpensesFromPreviousMonth(Request $request, $id){
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             $this->goThroughTimeForExpensesList($household, "-1 months");
 
             return redirect()->back();
@@ -56,7 +56,7 @@ class HouseholdsController extends Controller
     // gets expenses from next month (next month from one stored in session)
     public function loadExpensesFromNextMonth(Request $request, $id){
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             $this->goThroughTimeForExpensesList($household, "+1 months");
 
             return redirect()->back();
@@ -69,7 +69,7 @@ class HouseholdsController extends Controller
     // return expenses grouped by category
     public function getExpensesByCategory(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
 
             $expenses = $household->fetchExpensesByCategory(null, date('m'), date('Y'));
 
@@ -86,7 +86,7 @@ class HouseholdsController extends Controller
     // returns custom data range (by default returns this week only)
     public function getCustomDataRange(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
 
             $query_start_date = $request->query('start');
             $query_end_date = $request->query('end');
@@ -111,7 +111,7 @@ class HouseholdsController extends Controller
      */
     public function getDailyDataByHour(Request $request, $id, $day = null){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
 
             $display_day = date('d');
             $display_month = date('m');
@@ -143,7 +143,7 @@ class HouseholdsController extends Controller
      */
     public function getMonthlyData(Request $request, $id, $year){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
 
             $expenses = $household->fetchMonthlyExpenses($year);
 
@@ -166,8 +166,10 @@ class HouseholdsController extends Controller
     {
         $user = Auth::user();
         $households = $user->households()->paginate(10);
+        $shared_households = $user->sharedHouseholds;
         $data = [
-            'households' => $households
+            'households' => $households,
+            'shared_households' => $shared_households
         ];
 
         return view('households.index')->with($data);
@@ -240,7 +242,7 @@ class HouseholdsController extends Controller
     public function show($id)
     {
         $household = Household::findOrFail($id);
-        if($household != null && $household->user_id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             // viewing month for expenses table
             if(!Session::has('expense_list_view_year') &&
             !Session::has('expense_list_view_month')){
@@ -257,7 +259,9 @@ class HouseholdsController extends Controller
             }
 
             // get all members
-            $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
+            if($household->authUserCanViewMembers()){
+                $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
+            }
 
             // generate monthly income base on monthly income from household + any other members that have additional income
             $monthly_income = $household->getTotalIncome();
@@ -327,7 +331,7 @@ class HouseholdsController extends Controller
         $request->validate($validation);
 
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             $household->name = $request->input('name');
             $household->currency_id = $request->input('currency');
             $household->monthly_income = $request->input('monthly_income');
@@ -369,7 +373,7 @@ class HouseholdsController extends Controller
     public function destroy($id)
     {
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             if(Auth::user()->hasVerifiedEmail()){
                 $household->delete();
 

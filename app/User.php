@@ -40,4 +40,8 @@ class User extends Authenticatable
     public function households(){
         return $this->hasMany('App\Household');
     }
+
+    public function sharedHouseholds(){
+        return $this->hasMany('App\HouseholdShare');
+    }
 }

@@ -37,7 +37,7 @@ class MembersController extends Controller
         
         $household = \App\Household::findOrFail($request->input('household_id'));
 
-        if($household->user_id == Auth::id()){
+        if($household->authUserHasAccess() && $household->authUserCanAddMembers()){
             $member = new \App\HouseholdMember();
             $member->household_id = $request->input('household_id');
             $member->first_name = $request->input('first_name');
@@ -49,8 +49,8 @@ class MembersController extends Controller
             return redirect()->back();
         }
         else{
-            toastr()->error('Error adding a member');
-            return redirect('/dahsboard');
+            toastr()->error('Access denied');
+            return redirect()->back();
         }
     }
 
@@ -63,7 +63,7 @@ class MembersController extends Controller
     public function edit($id)
     {
         $member = \App\HouseholdMember::findOrFail($id);
-        if($member != null && $member->household->user_id == Auth::id()){
+        if($member != null && $member->household->user_id == Auth::id() && $member->household->authUserCanEditMembers()){
             $household_id = $member->household->id;
             $data = [
                 'member' => $member,
@@ -73,8 +73,8 @@ class MembersController extends Controller
             return view('members.edit')->with($data);
         }
         else{
-            toastr()->error('Member not found');
-            return redirect('/dashboard');
+            toastr()->error('Access denied');
+            return redirect()->back();
         }
     }
 
@@ -91,7 +91,7 @@ class MembersController extends Controller
 
         $member = \App\HouseholdMember::findOrFail($id);
 
-        if($member != null && $member->household->user_id == Auth::id()){
+        if($member != null && $member->household->user_id == Auth::id() && $member->household->authUserCanEditMembers()){
 
             // decrease members household current balance, because observer will increase it by new additional income
             $members_household = $member->household;
@@ -104,11 +104,11 @@ class MembersController extends Controller
             $member->save();
 
             toastr()->success('Household member updated');
-            return redirect('/households' . '/' . $member->household->id);
+            return redirect()->back();
         }
         else{
-            toastr()->error('Error updating a member');
-            return redirect('/dahsboard');
+            toastr()->error('Access denied');
+            return redirect()->back();
         }
     }
 
@@ -121,14 +121,14 @@ class MembersController extends Controller
     public function destroy($id)
     {
         $member = \App\HouseholdMember::findOrFail($id);
-        if($member->household->user_id == Auth::id()){
+        if($member->household->user_id == Auth::id() && $member->household->authUserCanDeleteMembers()){
             $member->delete();
             toastr()->success('Member removed');
             return redirect()->back();
         }
         else{
-            toastr()->error('This is not member of your household');
-            return redirect('/dashboard');
+            toastr()->error('Access denied');
+            return redirect()->back();
         }
     }
 }

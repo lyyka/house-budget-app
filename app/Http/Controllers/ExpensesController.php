@@ -48,7 +48,7 @@ class ExpensesController extends Controller
         // check if the household belongs to this user
         $household = \App\Household::findOrFail($request->input('household_id'));
         $category = \App\ExpenseCategory::findOrFail($request->input('category_id'));
-        if($household->user_id == Auth::id() && $category != null){
+        if($household->authUserHasAccess() && $category != null){
             $expense = new \App\Expense();
             $expense->household_id = $request->input('household_id');
             $expense->category_id = $request->input('category_id');

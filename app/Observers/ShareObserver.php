@@ -16,6 +16,14 @@ class ShareObserver
     public function created(HouseholdShare $householdShare)
     {
         $email = $householdShare->shared_with_email;
+        
+        // if the user exists, grab his id and set it on user_id col
+        $user = \App\User::where('email', '=', $email)->first();
+        if($user != null){
+            $householdShare->user_id = $user->id;
+            $householdShare->save();
+        }
+
         Mail::to($email)->send(new \App\Mail\HouseholdShared($householdShare));
     }
 

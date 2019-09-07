@@ -42,7 +42,7 @@ class HouseholdSharingController extends Controller
         ]);
 
         $household = \App\Household::findOrFail($household_id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             $email = $request->input('share_to_email');
             if($email == Auth::user()->email){
                 toastr()->error('You can not share household with yourself');

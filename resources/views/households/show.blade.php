@@ -46,15 +46,19 @@
         @include('components.dashboard.households.modals.edit_household')
         @include('components.dashboard.households.modals.display_expense')
         @include('components.dashboard.households.modals.add_expense')
-        @include('components.dashboard.households.modals.add_member')
+        @if ($household->authUserCanAddMembers())
+            @include('components.dashboard.households.modals.add_member')
+        @endif
 
         <div class="row">
             <div class="col-lg-6 mb-4">
                 @include('components.dashboard.households.money')
             </div>
-            <div class="col-lg-6 mb-4">
-                @include('components.dashboard.households.members_list')
-            </div>
+            @if ($household->authUserCanAddMembers() || $household->authUserCanViewMembers())
+                <div class="col-lg-6 mb-4">
+                    @include('components.dashboard.households.members_list')
+                </div>
+            @endif
         </div>
 
         <div class="mb-4">

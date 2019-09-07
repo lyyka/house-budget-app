@@ -18,7 +18,6 @@ class HouseholdShare extends Model
     }
 
     public function sharedWith(){
-        $user = \App\User::where('email', '=', $this->email)->get();
-        return $user;
+        return $this->belongsTo('App\User', 'user_id');
     }
 }

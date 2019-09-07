@@ -47,7 +47,7 @@ class ExcelController extends Controller
         }
 
         $household = \App\Household::findOrFail($household_id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             $expenses = $household->expenses();
 
             if($start_date != null){
@@ -92,7 +92,7 @@ class ExcelController extends Controller
 
         $household = \App\Household::findOrFail($request->input('household_id'));
 
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && $household->authUserHasAccess()){
             if($request->hasFile('excel_import_table')){
                 $file = $request->file('excel_import_table');
                 $import = new ExpensesImport($household);
