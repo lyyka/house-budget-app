@@ -265,8 +265,9 @@ class HouseholdsController extends Controller
             // get categories for expense form
             $categories = \App\ExpenseCategory::all();
 
-            // viewing months for charts
-            
+            // shared with
+            $shared_with_currently = $household->getShares;
+            $sharing_permissions_list = \App\SharingPermission::all();
 
             $data = [
                 'currencies' => \App\Currency::all(), // for the household edit form
@@ -279,7 +280,9 @@ class HouseholdsController extends Controller
                 'expense_list_current_date' => [
                     'month' => Session::get('expense_list_view_month'),
                     'year' => Session::get('expense_list_view_year')
-                ], // current date to show above expense list
+                ], // current date to show above expense list,
+                'shared_with' => $shared_with_currently, // all emails (and users) with which this household is shared
+                'sharing_permissions_list' => $sharing_permissions_list // list of all permissions to load into a sharing form
             ];
 
             return view('households.show')->with($data);

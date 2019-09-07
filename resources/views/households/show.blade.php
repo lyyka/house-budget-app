@@ -6,19 +6,43 @@
 
 @section('content')
     <div class="container">
-        <h1 class="text-center">{{ $household->name }}</h1>
-        <div class="text-center">
-            <h5 id="edit_household" class="text-info mb-5 pb-5 cursor-pointer d-inline-block">
-                <i class="fas fa-cogs"></i>
-                Settings
-            </h5>
+        <div class="mb-5 pb-5 text-center">
+            <h1 class="d-inline-block">
+                {{ $household->name }}
+            </h1>
+            <div class="ml-3 cursor-pointer d-inline-block position-relative">
+                <div class="dropdown">
+                    <button id="household_actions" class="bg-transparent border-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="h3">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="household_actions">
+                        <a class="dropdown-item" href="javascript:void(0)" id = "edit_household">
+                            <i class="fas fa-cogs"></i> 
+                            Settings
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0)" id = "share_household">
+                            <i class="fas fa-share-alt"></i> 
+                            Share
+                        </a>
+                        <a class="dropdown-item" href="javascript:void(0)" id = "shared_with">
+                            <i class="fas fa-users"></i> 
+                            Shared With
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <input type="hidden" id="household_id" value="{{ $household->id }}" />
 
         {{-- modals --}}
         @include('components.dashboard.households.modals.import_from_xlsx')
         @include('components.dashboard.households.modals.export_to_xlsx')
         @include('components.dashboard.households.modals.destroy_household')
+        @include('components.dashboard.households.modals.shared_with_list')
+        @include('components.dashboard.households.modals.share_household')
         @include('components.dashboard.households.modals.edit_household')
         @include('components.dashboard.households.modals.display_expense')
         @include('components.dashboard.households.modals.add_expense')
@@ -69,7 +93,7 @@
     @endif
 
     {{-- edit household button --}}
-    <script src="{{ asset('js/households/edit_household.js') }}"></script>
+    <script src="{{ asset('js/households/household_actions_menu.js') }}"></script>
 
     {{-- form --}}
     <script src="{{ asset('js/households/expense_form.js') }}"></script>

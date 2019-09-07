@@ -14,6 +14,10 @@ class Household extends Model
     // Timestamps
     public $timestamps = true;
 
+    public function getShares(){
+        return $this->hasMany('App\HouseholdShare');
+    }
+
     public function owner(){
         return $this->belongsTo('App\User', 'user_id');
     }
