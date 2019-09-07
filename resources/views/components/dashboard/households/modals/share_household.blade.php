@@ -16,7 +16,7 @@
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
                     <label class="d-block">Sharing permissions: <span class="text-info">*</span></label>
-                    @foreach ($sharing_permissions_list as $permission)
+                    @foreach ($sharing_permissions_list->sortBy('name') as $permission)
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" name="sharing_permissions[]" id="sharing_permissions_{{ $permission->id }}" value="{{ $permission->name }}" />
                             <label class="custom-control-label" for="sharing_permissions_{{ $permission->id }}">
