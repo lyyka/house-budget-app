@@ -19,6 +19,7 @@ class SharingPermissionsTableSeeder extends Seeder
             'Delete members',
             'Add expenses',
             'View expenses',
+            'Delet expenses',
             'View charts',
             'View household balance',
             'Share with other people',

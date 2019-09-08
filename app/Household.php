@@ -15,40 +15,6 @@ class Household extends Model
     // Timestamps
     public $timestamps = true;
 
-    private function getAuthPermissions(){
-        $share_link = Auth::user()->sharedHouseholds()->where('household_id', '=', $this->id)->first();
-        if($share_link != null){
-            return json_decode($share_link->permissions);
-        }
-        else{
-            return null;
-        }
-    }
-
-    // MEMBERS PERMISSIONS
-
-    public function authUserCanAddMembers(){
-        $permissions = $this->getAuthPermissions();
-        return ($permissions != null && $permissions->add_members) || Auth::id() == $this->owner->id;
-    }
-
-    public function authUserCanViewMembers(){
-        $permissions = $this->getAuthPermissions();
-        return ($permissions != null && $permissions->view_members) || Auth::id() == $this->owner->id;
-    }
-
-    public function authUserCanEditMembers(){
-        $permissions = $this->getAuthPermissions();
-        return ($permissions != null && $permissions->edit_members) || Auth::id() == $this->owner->id;
-    }
-
-    public function authUserCanDeleteMembers(){
-        $permissions = $this->getAuthPermissions();
-        return ($permissions != null && $permissions->delete_members) || Auth::id() == $this->owner->id;
-    }
-
-    // END MEMBERS PERMISSIONS
-
     public function getShares(){
         return $this->hasMany('App\HouseholdShare');
     }
@@ -67,15 +33,6 @@ class Household extends Model
 
     public function currency(){
         return $this->belongsTo('App\Currency', 'currency_id');
-    }
-
-    public function authUserHasAccess(){
-        $has_access = $this->owner->id == Auth::id();
-        if(!$has_access){
-            $shares = $this->getShares()->where('shared_with_email', '=', Auth::user()->email)->get();
-            $has_access = count($shares) > 0;
-        }
-        return $has_access;
     }
 
     public function getTotalIncome(){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class MembersController extends Controller
@@ -37,7 +38,7 @@ class MembersController extends Controller
         
         $household = \App\Household::findOrFail($request->input('household_id'));
 
-        if($household->authUserHasAccess() && $household->authUserCanAddMembers()){
+        if(Gate::allows('add-members', $household)){
             $member = new \App\HouseholdMember();
             $member->household_id = $request->input('household_id');
             $member->first_name = $request->input('first_name');
@@ -63,7 +64,7 @@ class MembersController extends Controller
     public function edit($id)
     {
         $member = \App\HouseholdMember::findOrFail($id);
-        if($member != null && $member->household->user_id == Auth::id() && $member->household->authUserCanEditMembers()){
+        if($member != null && Gate::allows('edit-members', $member)){
             $household_id = $member->household->id;
             $data = [
                 'member' => $member,
@@ -91,7 +92,7 @@ class MembersController extends Controller
 
         $member = \App\HouseholdMember::findOrFail($id);
 
-        if($member != null && $member->household->user_id == Auth::id() && $member->household->authUserCanEditMembers()){
+        if($member != null && Gate::allows('edit-members', $member)){
 
             // decrease members household current balance, because observer will increase it by new additional income
             $members_household = $member->household;
@@ -121,7 +122,7 @@ class MembersController extends Controller
     public function destroy($id)
     {
         $member = \App\HouseholdMember::findOrFail($id);
-        if($member->household->user_id == Auth::id() && $member->household->authUserCanDeleteMembers()){
+        if(Gate::allows('delete-members', $member)){
             $member->delete();
             toastr()->success('Member removed');
             return redirect()->back();

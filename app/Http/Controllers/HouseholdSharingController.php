@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -42,7 +43,7 @@ class HouseholdSharingController extends Controller
         ]);
 
         $household = \App\Household::findOrFail($household_id);
-        if($household != null && $household->authUserHasAccess()){
+        if($household != null && Gate::allows('share-household', $household)){
             $email = $request->input('share_to_email');
             if($email == Auth::user()->email){
                 toastr()->error('You can not share household with yourself');
@@ -113,7 +114,7 @@ class HouseholdSharingController extends Controller
     public function destroy($id)
     {
         $share = \App\HouseholdShare::findOrFail($id);
-        if($share != null && $share->household->owner->id == Auth::id()){
+        if($share != null && Gate::allows('share-household', $household)){
             $email = $share->shared_with_email;
             $share->delete();
             toastr()->success("Acces revoked for " . $email);
