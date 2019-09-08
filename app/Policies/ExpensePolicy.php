@@ -19,6 +19,10 @@ class ExpensePolicy
         //
     }
 
+    private function getSharingLink($user_id, $household_id){
+        return \App\HouseholdShare::where('user_id', '=', $user_id)->where('household_id', '=', $household_id)->first();
+    }
+
     /**
      * Determine whether the user can create expensesfor household.
      *
@@ -27,13 +31,13 @@ class ExpensePolicy
      */
     public function create(User $user, \App\Household $household)
     {
-        $link = \App\HouseholdShare::where('user_id', '=', $user->id)->where('household_id', '=', $household->id)->first();
+        $link = $this->getSharingLink($user->id, $household->id);
         if($link != null){
             $options = json_decode($link->permissions);
             return ($options->add_expenses != null && $options->add_expenses);
         }
         else{
-            return false || $user->id == $household->owner->id;
+            return $user->id == $household->owner->id;
         }
     }
 
@@ -45,13 +49,13 @@ class ExpensePolicy
      */
     public function view(User $user, \App\Household $household)
     {
-        $link = \App\HouseholdShare::where('user_id', '=', $user->id)->where('household_id', '=', $household->id)->first();
+        $link = $this->getSharingLink($user->id, $household->id);
         if($link != null){
             $options = json_decode($link->permissions);
             return ($options->view_expenses != null && $options->view_expenses);
         }
         else{
-            return false || $user->id == $household->owner->id;
+            return $user->id == $household->owner->id;
         }
     }
 
@@ -63,13 +67,13 @@ class ExpensePolicy
      */
     public function delete(User $user, \App\Household $household)
     {
-        $link = \App\HouseholdShare::where('user_id', '=', $user->id)->where('household_id', '=', $household->id)->first();
+        $link = $this->getSharingLink($user->id, $household->id);
         if($link != null){
             $options = json_decode($link->permissions);
             return ($options->delete_expenses != null && $options->delete_expenses);
         }
         else{
-            return false || $user->id == $household->owner->id;
+            return $user->id == $household->owner->id;
         }
     }
 }

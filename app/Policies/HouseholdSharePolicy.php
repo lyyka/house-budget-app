@@ -26,7 +26,7 @@ class HouseholdSharePolicy
             return ($options->share_with_other_people != null && $options->share_with_other_people);
         }
         else{
-            return false || $user->id == $household->owner->id;
+            return $user->id == $household->owner->id;
         }
     }
 }

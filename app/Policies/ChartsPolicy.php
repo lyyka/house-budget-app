@@ -26,7 +26,7 @@ class ChartsPolicy
             return ($options->view_charts != null && $options->view_charts);
         }
         else{
-            return false || $user->id == $household->owner->id;
+            return $user->id == $household->owner->id;
         }
     }
 }
