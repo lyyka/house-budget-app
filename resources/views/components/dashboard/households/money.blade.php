@@ -24,14 +24,16 @@
         <p class="mb-1 text-muted">
             Budget will be reset on {{ date('d/m/Y', strtotime('+1 month', strtotime(date("Y") . '-' . date('m') . '-' . $household->budget_reset_day))) }}
         </p>
-        <hr />
     @endcan
-    <button type="button" class="mb-2 py-1 px-3 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#exportDataToXlsxModal">
-        <i class="fas fa-file-export"></i>
-        Export to Excel
-    </button>
-    <button type="button" class="mb-2 py-1 px-3 bg-success text-white rounded shadow-sm border" data-toggle="modal" data-target="#importDataFromXlsxModal">
-        <i class="fas fa-file-upload"></i>
-        Import from Excel
-    </button>
+    @can('view-expense', $household)
+        <hr />
+        <button type="button" class="mb-2 py-1 px-3 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#exportDataToXlsxModal">
+            <i class="fas fa-file-export"></i>
+            Export to Excel
+        </button>
+        <button type="button" class="mb-2 py-1 px-3 bg-success text-white rounded shadow-sm border" data-toggle="modal" data-target="#importDataFromXlsxModal">
+            <i class="fas fa-file-upload"></i>
+            Import from Excel
+        </button>
+    @endcan
 </div>
