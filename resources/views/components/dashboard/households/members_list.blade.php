@@ -1,5 +1,5 @@
-<div class="rounded shadow-sm border p-4">
-    <h3>Members</h3>
+<div class="rounded shadow-sm border p-4 bg-white">
+    <h3><i class="fas fa-users"></i> Members</h3>
     @can('add-members', $household)
         <div class="text-right">
             <button type="button" class="mb-2 px-3 py-1 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#addMemberModal">

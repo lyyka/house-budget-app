@@ -1,5 +1,5 @@
-<div class="rounded shadow-sm border p-4">
-    <h3>Expense List by Month</h3>
+<div class="rounded shadow-sm border p-4 bg-white">
+    <h3><i class="fas fa-clipboard-list"></i> Expense List by Month</h3>
     <div class="text-right">
         @can('view-expense', $household)
             <div class="text-dark float-left">

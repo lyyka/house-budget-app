@@ -24,6 +24,7 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('users', 'UsersController', [
     'only' => ['edit', 'update', 'destroy']
 ]);
+Route::post('/users/{id}/password/new', 'UsersController@resetPassword');
 
 // households
 Route::resource('households', 'HouseholdsController');

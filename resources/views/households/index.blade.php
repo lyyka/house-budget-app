@@ -3,12 +3,14 @@
 @section('content')
     <div class="container">
         <h3>Browse Households</h3>
-        <a href="/households/create" class="px-3 py-1 bg-info text-white rounded shadow-sm border">
-            <i class="fas fa-plus"></i> Add Household
-        </a>
         <hr />
         {{-- my households --}}
         <h5>My Households</h5>
+        <a href="/households/create" class="px-3 py-1 bg-info text-white rounded shadow-sm border">
+            <i class="fas fa-plus"></i> Add Household
+        </a>
+        <br />
+        <br />
         @if (count($households) > 0)
             <table class="table table-striped">
                 <thead>
@@ -43,7 +45,7 @@
         @endif
 
         {{-- shared households --}}
-        <h5>Shared with me</h5>
+        <h5 class="mt-5">Shared with me</h5>
         @if (count($shared_households) > 0)
             <table class="table table-striped">
                 <thead>

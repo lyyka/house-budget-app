@@ -1,6 +1,6 @@
-<div class="rounded shadow-sm border p-4">
+<div class="rounded shadow-sm border p-4 bg-white">
     @can('view-household-balance', $household)
-        <h3>Balance</h3>
+        <h3><i class="fas fa-coins"></i> Balance</h3>
         <hr />
         <p class="h1 {{ $household->current_state <=  $household->expected_monthly_savings || $household->current_state <= 0 ? "text-danger" : "text-success"}}">
             @money($household->current_state * 100, $household->currency->currency_short)
