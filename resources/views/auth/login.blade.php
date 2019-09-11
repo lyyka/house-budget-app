@@ -5,11 +5,10 @@
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
             <a href="/" class="text-dark d-block mb-4"><i class="fas fa-angle-left"></i> Home</a>
-            <div class="rounded shadow-sm border p-4">
-                <div class="text-center">
-                    <img src="{{ asset('storage/images/log_in.png') }}" alt="Log In" class="img-fluid" />
-                </div>
-                <hr />
+            <div class="rounded shadow-sm border p-4 bg-white">
+                <h5 class="text-center text-dark h1 font-lobster mb-5">
+                    HouseBudget
+                </h5>
                 <form method="POST" action="{{ route("login") }}">
                     @csrf
                     

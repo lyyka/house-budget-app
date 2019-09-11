@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Household;
@@ -24,26 +25,28 @@ class HouseholdsController extends Controller
 
     // changes session variables for expenses list
     public function goThroughTimeForExpensesList($household, $interval){
-        if(!Session::has('expense_list_view_year') &&
-        !Session::has('expense_list_view_month')){
-            Session::put('expense_list_view_year', date("Y"));
-            Session::put('expense_list_view_month', date("m"));
+        if(Gate::allows('view-charts', $household)){
+            if(!Session::has('expense_list_view_year') &&
+            !Session::has('expense_list_view_month')){
+                Session::put('expense_list_view_year', date("Y"));
+                Session::put('expense_list_view_month', date("m"));
+            }
+
+            $current_view_month = Session::get('expense_list_view_month');
+            $current_view_year = Session::get('expense_list_view_year');
+
+            $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
+            $modified = $datetime->modify($interval);
+
+            Session::put('expense_list_view_month', $modified->format('m'));
+            Session::put('expense_list_view_year', $modified->format('Y'));
         }
-
-        $current_view_month = Session::get('expense_list_view_month');
-        $current_view_year = Session::get('expense_list_view_year');
-
-        $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
-        $modified = $datetime->modify($interval);
-
-        Session::put('expense_list_view_month', $modified->format('m'));
-        Session::put('expense_list_view_year', $modified->format('Y'));
     }
 
     // gets expenses from previous month (previous month from one stored in session)
     public function loadExpensesFromPreviousMonth(Request $request, $id){
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
             $this->goThroughTimeForExpensesList($household, "-1 months");
 
             return redirect()->back();
@@ -56,7 +59,7 @@ class HouseholdsController extends Controller
     // gets expenses from next month (next month from one stored in session)
     public function loadExpensesFromNextMonth(Request $request, $id){
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
             $this->goThroughTimeForExpensesList($household, "+1 months");
 
             return redirect()->back();
@@ -69,7 +72,7 @@ class HouseholdsController extends Controller
     // return expenses grouped by category
     public function getExpensesByCategory(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
 
             $expenses = $household->fetchExpensesByCategory(null, date('m'), date('Y'));
 
@@ -86,7 +89,7 @@ class HouseholdsController extends Controller
     // returns custom data range (by default returns this week only)
     public function getCustomDataRange(Request $request, $id){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
 
             $query_start_date = $request->query('start');
             $query_end_date = $request->query('end');
@@ -111,7 +114,7 @@ class HouseholdsController extends Controller
      */
     public function getDailyDataByHour(Request $request, $id, $day = null){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
 
             $display_day = date('d');
             $display_month = date('m');
@@ -143,7 +146,7 @@ class HouseholdsController extends Controller
      */
     public function getMonthlyData(Request $request, $id, $year){
         $household = Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-charts', $household)){
 
             $expenses = $household->fetchMonthlyExpenses($year);
 
@@ -166,8 +169,10 @@ class HouseholdsController extends Controller
     {
         $user = Auth::user();
         $households = $user->households()->paginate(10);
+        $shared_households = $user->sharedHouseholds;
         $data = [
-            'households' => $households
+            'households' => $households,
+            'shared_households' => $shared_households
         ];
 
         return view('households.index')->with($data);
@@ -240,7 +245,7 @@ class HouseholdsController extends Controller
     public function show($id)
     {
         $household = Household::findOrFail($id);
-        if($household != null && $household->user_id == Auth::id()){
+        if($household != null && Gate::allows('view-household', $household)){
             // viewing month for expenses table
             if(!Session::has('expense_list_view_year') &&
             !Session::has('expense_list_view_month')){
@@ -257,16 +262,23 @@ class HouseholdsController extends Controller
             }
 
             // get all members
-            $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
+            $members = [];
+            if(Gate::allows('view-members', $household)){
+                $members = $household->members()->orderBy('additional_income', 'desc')->paginate(5);
+            }
 
             // generate monthly income base on monthly income from household + any other members that have additional income
-            $monthly_income = $household->getTotalIncome();
+            $monthly_income = 0;
+            if(Gate::allows('view-household-balance', $household)){
+                $monthly_income = $household->getTotalIncome();
+            }
 
             // get categories for expense form
             $categories = \App\ExpenseCategory::all();
 
-            // viewing months for charts
-            
+            // shared with
+            $shared_with_currently = $household->getShares;
+            $sharing_permissions_list = \App\SharingPermission::all();
 
             $data = [
                 'currencies' => \App\Currency::all(), // for the household edit form
@@ -279,7 +291,9 @@ class HouseholdsController extends Controller
                 'expense_list_current_date' => [
                     'month' => Session::get('expense_list_view_month'),
                     'year' => Session::get('expense_list_view_year')
-                ], // current date to show above expense list
+                ], // current date to show above expense list,
+                'shared_with' => $shared_with_currently, // all emails (and users) with which this household is shared
+                'sharing_permissions_list' => $sharing_permissions_list // list of all permissions to load into a sharing form
             ];
 
             return view('households.show')->with($data);
@@ -324,7 +338,7 @@ class HouseholdsController extends Controller
         $request->validate($validation);
 
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('edit-household', $household)){
             $household->name = $request->input('name');
             $household->currency_id = $request->input('currency');
             $household->monthly_income = $request->input('monthly_income');
@@ -366,7 +380,7 @@ class HouseholdsController extends Controller
     public function destroy($id)
     {
         $household = \App\Household::findOrFail($id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('delete-household', $household)){
             if(Auth::user()->hasVerifiedEmail()){
                 $household->delete();
 

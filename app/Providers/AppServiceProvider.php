@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\User;
+use App\Observers\UserObserver;
+
+use App\HouseholdShare;
+use App\Observers\ShareObserver;
+
 use App\Household;
 use App\Observers\HouseholdsObserver;
 
@@ -38,5 +44,7 @@ class AppServiceProvider extends ServiceProvider
         Household::observe(HouseholdsObserver::class);
         HouseholdMember::observe(HouseholdMemberObserver::class);
         Expense::observe(ExpensesObserver::class);
+        HouseholdShare::observe(ShareObserver::class);
+        User::observe(UserObserver::class);
     }
 }

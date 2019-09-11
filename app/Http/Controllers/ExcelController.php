@@ -6,6 +6,7 @@ use Auth;
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 // export
 use App\Exports\ExpensesExport;
@@ -47,7 +48,7 @@ class ExcelController extends Controller
         }
 
         $household = \App\Household::findOrFail($household_id);
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('view-expense', $household)){
             $expenses = $household->expenses();
 
             if($start_date != null){
@@ -92,7 +93,7 @@ class ExcelController extends Controller
 
         $household = \App\Household::findOrFail($request->input('household_id'));
 
-        if($household != null && $household->owner->id == Auth::id()){
+        if($household != null && Gate::allows('add-expense', $household)){
             if($request->hasFile('excel_import_table')){
                 $file = $request->file('excel_import_table');
                 $import = new ExpensesImport($household);
@@ -107,7 +108,7 @@ class ExcelController extends Controller
             }
         }
         else{
-            toastr()->error('You can not import to this household');
+            toastr()->error('Access Denied');
             return redirect()->back();
         }
     }

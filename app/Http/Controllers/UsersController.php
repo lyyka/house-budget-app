@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Hash;
 
 class UsersController extends Controller
 {
@@ -25,15 +26,50 @@ class UsersController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function resetPassword(Request $request, $id){
+        if(!Auth::user()->hasVerifiedEmail()){
+            toastr()->error('You msut verify your email address');
+            return redirect()->back();
+        }
+
+        $request->validate([
+            'old_password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
+        ]);
+
+        $old_password = $request->input('old_password');
+        $new_password = $request->input('password');
+
+        if(Auth::user()->id == $id){
+            // retrieve user
+            $user = \App\User::findOrFail($id);
+
+            // check current password
+            if(Hash::check($old_password, $user->password)){
+                // check if new password is same
+                $new_is_same = Hash::check($new_password, $user->password);
+
+                if($new_is_same){
+                    toastr()->error("New password is same as the current one");
+                    return redirect()->back();
+                }
+                else{
+                    $user->password = Hash::make($new_password);
+                    $user->save();
+                    toastr()->success('Your password has been updated');
+                    return redirect()->back();
+                }
+            }
+            else{
+                toastr()->error("Current password is not valid");
+                // current password not good
+                return redirect()->back();
+            }
+        }
+        else{
+            toastr()->error("Access Denied");
+            return redirect()->back();
+        }
     }
 
     /**

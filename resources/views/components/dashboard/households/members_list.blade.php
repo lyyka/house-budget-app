@@ -1,10 +1,13 @@
-<div class="rounded shadow-sm border p-4">
-        <h3>Members</h3>
+<div class="rounded shadow-sm border p-4 bg-white">
+    <h3><i class="fas fa-users"></i> Members</h3>
+    @can('add-members', $household)
         <div class="text-right">
             <button type="button" class="mb-2 px-3 py-1 bg-info text-white rounded shadow-sm border" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
             </button>
         </div>
+    @endcan
+    @can('view-members', $household)
         @if (count($members) > 0)
             <table class="table table-striped">
                 <thead>
@@ -22,16 +25,20 @@
                                 @money($member->additional_income * 100, $household->currency->currency_short)
                             </td>
                             <td>
-                                <a href="/members/{{ $member->id }}/edit" class="text-info">
-                                    Edit
-                                </a>
-                                <form method="POST" action="/members/{{ $member->id }}">
-                                    @csrf
-                                    @method("DELETE")
-                                    <button type="submit" class="border-0 text-danger p-0 bg-transparent">
-                                        Remove
-                                    </button>
-                                </form>
+                                @can('edit-members', $member)
+                                    <a href="/members/{{ $member->id }}/edit" class="text-info">
+                                        Edit
+                                    </a>
+                                @endcan
+                                @can('delete-members', $member)
+                                    <form method="POST" action="/members/{{ $member->id }}">
+                                        @csrf
+                                        @method("DELETE")
+                                        <button type="submit" class="border-0 text-danger p-0 bg-transparent">
+                                            Remove
+                                        </button>
+                                    </form>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
@@ -43,4 +50,5 @@
                 No members added
             </p>
         @endif
-    </div>
+    @endcan
+</div>

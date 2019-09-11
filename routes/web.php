@@ -24,9 +24,13 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('users', 'UsersController', [
     'only' => ['edit', 'update', 'destroy']
 ]);
+Route::post('/users/{id}/password/new', 'UsersController@resetPassword');
 
 // households
 Route::resource('households', 'HouseholdsController');
+// households sharing
+Route::post('/households/{id}/share', 'HouseholdSharingController@store');
+Route::delete('/share/{id}/revoke', 'HouseholdSharingController@destroy');
 // chart data collection
 Route::get('/households/{id}/{year}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');
 Route::get('/households/{id}/daily_data_by_hour/{day?}', 'HouseholdsController@getDailyDataByHour')->name('household.dailyByHour');

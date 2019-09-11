@@ -28,6 +28,7 @@
                 <div class="mb-4">
                     <label for="additional_income" class="d-block">Additional Income:</label>
                     <input id="additional_income" type="number" min="1" class="w-100 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" required autofocus placeholder="How much does the member make?" value = "{{ old('additional_income', $member->additional_income) }}" />
+                    <label class="text-muted">{{ $member->household->currency->currency_short }}</label>
                     @error('additional_income')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror

@@ -1,4 +1,4 @@
-<div class="rounded shadow-sm border p-4">
+<div class="rounded shadow-sm border p-4 bg-white">
     <h3 class="mb-0">Custom Range</h3>
     <p class="text-muted">
         Default is current week

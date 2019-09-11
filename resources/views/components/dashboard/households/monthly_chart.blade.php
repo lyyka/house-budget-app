@@ -1,4 +1,4 @@
-<div class="rounded shadow-sm border p-4">
+<div class="rounded shadow-sm border p-4 bg-white">
     <h3>Yearly Report</h3>
     <div class="text-darkt">
         <span id="yearly_chart_prev_year" class="cursor-pointer text-dark">

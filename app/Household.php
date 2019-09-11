@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class Household extends Model
 {
@@ -13,6 +14,10 @@ class Household extends Model
     public $primary_key = 'id';
     // Timestamps
     public $timestamps = true;
+
+    public function getShares(){
+        return $this->hasMany('App\HouseholdShare');
+    }
 
     public function owner(){
         return $this->belongsTo('App\User', 'user_id');

@@ -5,6 +5,7 @@ html, body{
 }
 body{
     height: 100vh;
+    background-color: #f7f7f7;
 }
 
 .abs-center-middle{

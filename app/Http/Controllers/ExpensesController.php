@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class ExpensesController extends Controller
@@ -13,7 +14,7 @@ class ExpensesController extends Controller
 
     public function fetchExpense(Request $request, $id){
         $expense = \App\Expense::findOrFail($id);
-        if($expense != null && $expense->household->owner->id == Auth::id()){
+        if($expense != null && Gate::allows('view-expense', $expense->household)){
             return response()->json([
                 'success' => true,
                 'expense_data' => $expense,
@@ -48,7 +49,7 @@ class ExpensesController extends Controller
         // check if the household belongs to this user
         $household = \App\Household::findOrFail($request->input('household_id'));
         $category = \App\ExpenseCategory::findOrFail($request->input('category_id'));
-        if($household->user_id == Auth::id() && $category != null){
+        if(Gate::allows('add-expense', $household) && $category != null){
             $expense = new \App\Expense();
             $expense->household_id = $request->input('household_id');
             $expense->category_id = $request->input('category_id');
@@ -93,7 +94,7 @@ class ExpensesController extends Controller
     public function destroy($id)
     {
         $expense = \App\Expense::findOrFail($id);
-        if($expense != null & $expense->household->owner->id == Auth::id()){
+        if($expense != null & Gate::allows('delete-expense', $expense->household)){
             if(Auth::user()->hasVerifiedEmail()){
                 // if(date("m", strtotime($expense->created_at)) == date("m")){
                 //     $expense->household->current_state += $expense->amount;
