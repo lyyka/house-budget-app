@@ -28,15 +28,30 @@
                 <hr />
                 <div class="mb-4">
                     <label>Select categories to export: </label>
-                    @foreach ($expense_categories as $cat)
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="export_categories[]" id="export_categories_{{ $cat->id }}" value="{{ $cat->name }}" />
-                            <label class="custom-control-label" for="export_categories_{{ $cat->id }}">
-                                {{ $cat->name }}
-                            </label>
-                            <br />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            @for ($i = 0; $i < count($expense_categories) / 2; $i++)
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="export_categories[]" id="export_categories_{{ $expense_categories[$i]->id }}" value="{{ $expense_categories[$i]->name }}" />
+                                    <label class="custom-control-label" for="export_categories_{{ $expense_categories[$i]->id }}">
+                                        {{ $expense_categories[$i]->name }}
+                                    </label>
+                                    <br />
+                                </div>
+                            @endfor
                         </div>
-                    @endforeach
+                        <div class="col-lg-6">
+                            @for ($i = count($expense_categories) / 2; $i < count($expense_categories); $i++)
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="export_categories[]" id="export_categories_{{ $expense_categories[$i]->id }}" value="{{ $expense_categories[$i]->name }}" />
+                                    <label class="custom-control-label" for="export_categories_{{ $expense_categories[$i]->id }}">
+                                        {{ $expense_categories[$i]->name }}
+                                    </label>
+                                    <br />
+                                </div>
+                            @endfor
+                        </div>
+                    </div>
                 </div>
                 <hr />
                 <div class="row">

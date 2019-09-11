@@ -19,6 +19,10 @@ class Household extends Model
         return $this->hasMany('App\HouseholdShare');
     }
 
+    public function isShared(){
+        return count($this->getShares()) > 0;
+    }
+
     public function owner(){
         return $this->belongsTo('App\User', 'user_id');
     }

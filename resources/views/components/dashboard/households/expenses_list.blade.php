@@ -29,31 +29,37 @@
     </div>
     @can('view-expense', $household)
             @if (count($expenses) > 0)
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col" class="d-none d-md-table-cell">Category</th>
-                        <th scope="col" class="d-none d-lg-table-cell">Made At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($expenses as $expense)
-                        <tr class="cursor-pointer expense_row" data-expense-id = "{{ $expense->id }}">
-                            <th scope="row">{{ $expense->name }}</th>
-                            <td>
-                                @money($expense->amount * 100, $household->currency->currency_short)
-                            </td>
-                            <td class="d-none d-md-table-cell">
-                                <div class="rounded-circle d-inline-block" style="width:15px; height:15px; background-color: #{{ $expense->category->hex_color }}"></div>
-                                {{ $expense->category->name }}
-                            </td>
-                            <td class="d-none d-lg-table-cell">{{ date("d M, Y H:i", strtotime($expense->created_at)) }}</td>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Amount</th>
+                            {{-- <th scope="col" class="d-none d-md-table-cell">Category</th> --}}
+                            <th scope="col">Category</th>
+                            {{-- <th scope="col" class="d-none d-lg-table-cell">Made At</th> --}}
+                            <th scope="col">Made At</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($expenses as $expense)
+                            <tr class="cursor-pointer expense_row" data-expense-id = "{{ $expense->id }}">
+                                <th scope="row">{{ $expense->name }}</th>
+                                <td>
+                                    @money($expense->amount * 100, $household->currency->currency_short)
+                                </td>
+                                {{-- <td class="d-none d-md-table-cell"> --}}
+                                <td>
+                                    <div class="rounded-circle d-inline-block" style="width:15px; height:15px; background-color: #{{ $expense->category->hex_color }}"></div>
+                                    {{ $expense->category->name }}
+                                </td>
+                                {{-- <td class="d-none d-lg-table-cell">{{ date("d M, Y H:i", strtotime($expense->created_at)) }}</td> --}}
+                                <td>{{ date("d M, Y H:i", strtotime($expense->created_at)) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             {{ $expenses->links("vendor.pagination.bootstrap-4") }}
             <hr />
             <p>

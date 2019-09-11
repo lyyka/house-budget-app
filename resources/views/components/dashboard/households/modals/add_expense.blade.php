@@ -12,7 +12,7 @@
                 @csrf
                 <input type="hidden" name="household_id" value = {{ $household->id }} />
                 <div class="mb-4">
-                    <label for="name" class="d-block">Expense title:</label>
+                    <label for="name" class="d-block">Expense title: <span class="text-info">*</span></label>
                     <input id="name" type="text" class="w-100 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required autofocus placeholder="Describe the expense" value = "{{ old('name') }}" />
                     @error('name')
                         <label class = "d-block text-danger">{{ $message }}</label>
@@ -20,7 +20,7 @@
                 </div>
         
                 <div class="mb-4">
-                    <label for="amount" class="d-block">Amount:</label>
+                    <label for="amount" class="d-block">Amount: <span class="text-info">*</span></label>
                     <input id="amount" type="number" min="1" class="w-100 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required autofocus placeholder="How much did you spend?" value = "{{ old('amount') }}" />
                     <label class="text-muted">{{ $household->currency->currency_short }}</label>
                     @error('amount')
@@ -28,7 +28,7 @@
                     @enderror
                 </div>
         
-                <label for="category" class="d-block">Category:</label>
+                <label for="category" class="d-block">Category: <span class="text-info">*</span></label>
                 <input type="hidden" name="category_id" id="category" />
                 <div class="position-relative">
                     <div class="w-100 mb-4 rounded shadow-sm border py-2 px-3" id="open_categories_dropdown">

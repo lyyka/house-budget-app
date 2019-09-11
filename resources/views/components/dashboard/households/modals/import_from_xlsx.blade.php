@@ -12,15 +12,11 @@
         <div class="modal-body">
             @if (Auth::user()->hasVerifiedEmail())
                 <p>You can import all expenses to our database by uploading excel document containing those expenses</p>
-                <img class="img-fluid" src="{{ asset('storage/excel_import/import_template_tutorial.gif') }}" alt="Import table preview" />
-                <label class="text-muted">Template preview</label>
+                <img class="img-fluid mb-2" src="{{ asset('storage/excel_import/import_template_tutorial.gif') }}" alt="Import table preview" />
                 <p>
-                    Make sure to use <a class="text-info" download href="{{ asset('storage/excel_import/import_template.xlsx') }}">our template excel document</a> so all your expanses get imported correctly.<br />
-                    If you happen to already have an excel file, please modify it so the first three columns represnt <span class="text-success">Name</span>, <span class="text-success">Amount</span>, <span class="text-success">Category</span>.
+                    Make sure to use <a class="text-info" download href="{{ asset('storage/excel_import/import_template.xlsx') }}">our template excel document</a> so all your expanses get imported correctly.
                 </p>
                 <hr />
-                When it's all done, you can upload your file
-                <br />
                 <form action="/excel/import" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="household_id" value = {{ $household->id }} />
@@ -28,7 +24,8 @@
                         <label class="text-danger d-block">{{ $message }}</label>
                     @enderror
                     <div class="upload-btn-wrapper">
-                        <button type="button" class="py-1 px-0 border-0 bg-transparent text-success cursor-pointer"><i class="fas fa-file-upload"></i> Upload a .XLSX file</button>
+                        {{-- <button type="button" class="py-1 px-0 border-0 bg-transparent text-success cursor-pointer"><i class="fas fa-file-upload"></i> Upload a .XLSX file</button> --}}
+                        <button type="button" class="py-1 px-3 bg-success text-white cursor-pointer border rounded shadow-sm"><i class="fas fa-file-upload"></i> Upload a .XLSX file</button>
                         <input type="file" name="excel_import_table" id="excel_import_table" class="cursor-pointer" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                         @error('excel_import_table')
                             <label class="text-danger d-block">{{ $message }}</label>

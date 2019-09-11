@@ -46,7 +46,7 @@
                     <img src="{{ asset('storage/images/report_design.png') }}" alt="Report Image" class="img-fluid" />
                 </div>
             </div>
-            <div class="row mb-5 pb-5">
+            <div class="row pb-5">
                 <div class="col-lg-4 mb-3 animated fadeInLeft">
                     <img src="{{ asset('storage/images/sharing.png') }}" alt="Sharing Network" class="img-fluid" />
                 </div>

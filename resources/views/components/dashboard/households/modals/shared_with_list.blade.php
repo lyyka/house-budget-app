@@ -31,13 +31,18 @@
                     <p class="mb-1">
                         <strong>{{ $share->shared_with_email }}</strong>
                     </p>
-                    <form action="/share/{{ $share->id }}/revoke" method="POST" class="mb-2">
-                        @csrf
-                        @method("DELETE")
-                        <button type="submit" class="border-0 p-0 bg-transparent text-info">
-                            Revoke access
-                        </button>
-                    </form>
+                    <div class="mb-2">
+                        <a href="/share/{{ $share->id }}/edit" class="text-info d-inline-block pr-1 border-right">
+                            Edit permissions
+                        </a>
+                        <form action="/share/{{ $share->id }}/revoke" method="POST" class="pl-1 d-inline-block">
+                            @csrf
+                            @method("DELETE")
+                            <button type="submit" class="border-0 p-0 bg-transparent text-danger">
+                                Revoke access
+                            </button>
+                        </form>
+                    </div>
                     <p class="mb-1">
                         <span class="text-success">
                             <i class="fas fa-check-circle"></i>

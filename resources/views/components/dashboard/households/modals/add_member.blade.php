@@ -13,14 +13,14 @@
                     <input type="hidden" name="household_id" value = {{ $household->id }} />
                     <div class="row">
                         <div class="col-lg-6">
-                            <label for="first_name" class="d-block">First Name:</label>
+                            <label for="first_name" class="d-block">First Name: <span class="text-info">*</span></label>
                             <input id="first_name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('first_name') is-invalid @enderror" name="first_name" required autofocus placeholder="First Name" value = "{{ old('first_name') }}" />
                             @error('first_name')
                                 <label class = "d-block text-danger">{{ $message }}</label>
                             @enderror
                         </div>
                         <div class="col-lg-6">
-                            <label for="last_name" class="d-block">Last Name:</label>
+                            <label for="last_name" class="d-block">Last Name: <span class="text-info">*</span></label>
                             <input id="last_name" type="text" class="w-100 mb-4 rounded shadow-sm border py-2 px-3 @error('last_name') is-invalid @enderror" name="last_name" required autofocus placeholder="Last Name" value = "{{ old('last_name') }}" />
                             @error('last_name')
                                 <label class = "d-block text-danger">{{ $message }}</label>
@@ -29,7 +29,7 @@
                     </div>
             
                     <div class="mb-4">
-                        <label for="additional_income" class="d-block">Additional Income (optional):</label>
+                        <label for="additional_income" class="d-block">Additional Income:</label>
                         <input id="additional_income" type="number" min="0" class="w-100 rounded shadow-sm border py-2 px-3 @error('additional_income') is-invalid @enderror" name="additional_income" autofocus placeholder="How much does the member make?" value = "{{ old('additional_income') }}" />
                         <label class="text-muted">{{ $household->currency->currency_short }}</label>
                         @error('additional_income')

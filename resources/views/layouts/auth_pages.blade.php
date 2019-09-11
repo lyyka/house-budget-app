@@ -37,9 +37,6 @@
         {{-- View's content --}}
         @yield('content')
 
-        {{-- footer --}}
-        @include('components.footer')
-
         {{-- JQUERY --}}
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
