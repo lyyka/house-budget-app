@@ -3,18 +3,18 @@
     <div class="text-right">
         @can('view-expense', $household)
             <div class="text-dark float-left">
-                <a href="/households/{{ $household->id }}/expenses/prev_month" id="expense_table_prev" class="cursor-pointer text-dark">
+                <a href="/expenses/{{ $household->id }}/prev_month" id="expense_table_prev" class="cursor-pointer text-dark">
                     <i class="fas fa-angle-left"></i>
                 </a>
                 @php
                     $formatted_current_month = (DateTime::createFromFormat('!m', $expense_list_current_date['month']))->format("M");
                 @endphp
                 {{ $formatted_current_month }}, {{ $expense_list_current_date['year'] }}
-                <a href="/households/{{ $household->id }}/expenses/next_month" id="expense_table_next" class="cursor-pointer text-dark">
+                <a href="/expenses/{{ $household->id }}/next_month" id="expense_table_next" class="cursor-pointer text-dark">
                     <i class="fas fa-angle-right"></i>
                 </a>
                 @if (date('M') != $formatted_current_month || date("Y") != $expense_list_current_date['year'])
-                    <a href="/households/expenses/reset_expenses_list" class="cursor-pointer text-dark">
+                    <a href="/expenses/reset_expenses_list" class="cursor-pointer text-dark">
                         <i class="fas fa-sync-alt"></i>
                     </a>
                 @endif
@@ -46,7 +46,7 @@
                             <tr class="cursor-pointer expense_row" data-expense-id = "{{ $expense->id }}">
                                 <th scope="row">{{ $expense->name }}</th>
                                 <td>
-                                    @money($expense->amount * 100, $household->currency->currency_short)
+                                    {{ $household->currency->char }} @convertMoney($expense->amount)
                                 </td>
                                 {{-- <td class="d-none d-md-table-cell"> --}}
                                 <td>
@@ -63,7 +63,7 @@
             {{ $expenses->links("vendor.pagination.bootstrap-4") }}
             <hr />
             <p>
-                <strong>Total: </strong> @money($total_expenses * 100, $household->currency->currency_short)
+                <strong>Total: </strong> {{ $household->currency->char }} @convertMoney($total_expenses)
             </p>
         @else
             <p class="text-center text-muted">

@@ -3,7 +3,7 @@
         <h3><i class="fas fa-coins"></i> Balance</h3>
         <hr />
         <p class="h1 {{ $household->current_state <=  $household->expected_monthly_savings || $household->current_state <= 0 ? "text-danger" : "text-success"}}">
-            @money($household->current_state * 100, $household->currency->currency_short)
+            {{ $household->currency->char }} @convertMoney($household->current_state)
         </p>
         <hr />
         <div class="row">
@@ -11,13 +11,13 @@
                 <p class="mb-1">
                     <strong>Monthly Income</strong>
                 </p>
-                @money($monthly_income * 100, $household->currency->currency_short)
+                {{ $household->currency->char }} @convertMoney($monthly_income)
             </div>
             <div class="col-lg-6 mb-2">
                 <p class="mb-1">
                     <strong>Expected Savings</strong>
                 </p>
-                @money($household->expected_monthly_savings * 100, $household->currency->currency_short)
+                {{ $household->currency->char }} @convertMoney($household->expected_monthly_savings)
             </div>
         </div>
         <hr />

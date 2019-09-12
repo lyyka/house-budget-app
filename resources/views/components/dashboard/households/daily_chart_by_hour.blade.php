@@ -3,7 +3,7 @@
     <p class="text-muted">
         Default is current day
     </p>
-    <input type="date" id="daily_chart_date_dropdown" placeholder="Day to display" class="rounded border shadow-sm" />
+    <input type="date" id="daily_chart_date_dropdown" placeholder="Day to display" class="rounded border shadow-sm" value="{{ date('Y-m-d') }}" />
     <hr />
     <canvas id = "daily_chart_by_hours"></canvas>
 </div>

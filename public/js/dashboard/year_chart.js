@@ -24,7 +24,7 @@ function fetchMonthlyData(household_id, year){
         global_household_id = household_id;
         const req = $.ajax({
             type: "GET",
-            url: '/households/' + household_id + '/' + year + '/monthly_data',
+            url: '/charts/' + household_id + '/' + year + '/monthly_data',
             async: true,
             cache: false,
         });

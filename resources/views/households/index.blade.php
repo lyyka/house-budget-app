@@ -29,7 +29,7 @@
                                 <td>
                                     <a href="/households/{{ $household->id }}" class="text-info">
                                         {{ $household->name }}
-                                        {!! $household->isShared() ? '<i class="fas fa-users"></i>' : '' !!}
+                                        {!! $household->isShared() ? '<i class="fas fa-share-alt"></i>' : '' !!}
                                     </a>
                                 </td>
                                 <td>{{ count($household->members) + 1 }}</td>

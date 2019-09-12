@@ -14,47 +14,58 @@ class CurrenciesTableSeeder extends Seeder
     {
         DB::table('currencies')->insert([
             'currency_name' => "US dollar",
-            'currency_short' => "USD"
+            'currency_short' => "USD",
+            'char' => "$"
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Euro",
-            'currency_short' => "EUR"
+            'currency_short' => "EUR",
+            'char' => "€"
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Japanese yen",
-            'currency_short' => "JPY"
+            'currency_short' => "JPY",
+            'char' => '¥'
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Pound sterling",
-            'currency_short' => "GBP"
+            'currency_short' => "GBP",
+            'char' => '£'
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Australian dollar",
-            'currency_short' => "AUD"
+            'currency_short' => "AUD",
+            'char' => "$"
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Canadian dollar",
-            'currency_short' => "CAD"
+            'currency_short' => "CAD",
+            'char' => "$"
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Swiss franc",
-            'currency_short' => "CHF"
+            'currency_short' => "CHF",
+            'char' => 'CHF'
         ]);
         DB::table('currencies')->insert([
-            'currency_name' => "Chinese renminbi",
-            'currency_short' => "CNH"
+            'currency_name' => "Chinese Yuan Renminbi",
+            'currency_short' => "CNY",
+            'char' => '¥'
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Swedish krona",
-            'currency_short' => "SEK"
+            'currency_short' => "SEK",
+            'char' => 'kr'
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "New Zealand dollar",
-            'currency_short' => "NZD"
+            'currency_short' => "NZD",
+            'char' => "$"
         ]);
         DB::table('currencies')->insert([
             'currency_name' => "Serbian dinar",
-            'currency_short' => "RSD"
+            'currency_short' => "RSD",
+            'char' => 'Дин.'
         ]);
     }
 }

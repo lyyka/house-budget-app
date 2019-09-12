@@ -29,7 +29,7 @@ function customRangeDropdownChanged(){
 
 function fetchCustomRangeData(household_id){
     if(household_id > 0){
-        let url = '/households/' + household_id + '/custom_range';
+        let url = '/charts/' + household_id + '/custom_range';
         let has_start = false;
         if(start_date != undefined){
             has_start = true;

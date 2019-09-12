@@ -17,9 +17,9 @@
     </div>
     <div class="py-5 position-relative" id="main_ribbon">
         <div class="position-absolute abs-center-middle bg-white p-4 rounded shadow-sm border">
-            <h2 class="text-center">
-                Welcome to House Budget
-            </h2>
+            <h1 class="text-center font-lobster">
+                Welcome to HouseBudget
+            </h1>
             <p class="text-center">Manage all you household expenses in one place <br>and see detailed reports about them!</p>
         </div>
     </div>
@@ -27,7 +27,7 @@
     <div class="pt-5 bg-white">
         <div class="container">
             <div class="row mb-5 pb-5">
-                <div class="col-lg-4 mb-3 animated fadeInLeft">
+                <div class="col-lg-4 mb-3 animated fadeInLeft text-center">
                     <img src="{{ asset('storage/images/money_design.png') }}" alt="Money Image" class="img-fluid" />
                 </div>
                 <div class="col-lg-8 mb-3 animated fadeInRight">
@@ -42,12 +42,12 @@
                     <hr />
                     <p>Using our app for a longer period of time, it will start to generate more detailed expense report based on your income/expenses. This can help tremendously in managing your household budget!</p>
                 </div>
-                <div class="col-lg-4 mb-3 order-lg-2 order-md-1 order-sm-1 order-1 animated fadeInRight">
+                <div class="col-lg-4 mb-3 order-lg-2 order-md-1 order-sm-1 order-1 animated fadeInRight text-center">
                     <img src="{{ asset('storage/images/report_design.png') }}" alt="Report Image" class="img-fluid" />
                 </div>
             </div>
             <div class="row pb-5">
-                <div class="col-lg-4 mb-3 animated fadeInLeft">
+                <div class="col-lg-4 mb-3 animated fadeInLeft text-center">
                     <img src="{{ asset('storage/images/sharing.png') }}" alt="Sharing Network" class="img-fluid" />
                 </div>
                 <div class="col-lg-8 mb-3 animated fadeInRight">
