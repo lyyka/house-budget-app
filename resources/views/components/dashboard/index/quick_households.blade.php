@@ -1,5 +1,5 @@
 <div class="rounded shadow-sm p-4 border bg-white">
-    <h4>Households</h4>
+    <h4>Quick Households</h4>
     @if (count($households) == 0)
         <p class="text-center text-muted">
             No households data

@@ -48,9 +48,7 @@
                             <i class="fas fa-check-circle"></i>
                         </span>
                         <span class="text-muted">
-                            @foreach ($allowed as $allow)
-                                {{ $allow }},
-                            @endforeach
+                            {{ implode($allowed, ", ") }}
                         </span>
                     </span>
                     <p>
@@ -58,12 +56,12 @@
                             <i class="fas fa-times-circle"></i>
                         </span>
                         <span class="text-muted">
-                            @foreach ($disabled as $disable)
-                                {{ $disable }},
-                            @endforeach
+                            {{ implode($disabled, ", ") }}
                         </span>
                     </p>
-                    <hr />
+                    @if (count($shared_with) > 1)
+                        <hr />                    
+                    @endif
                 @endforeach
             </div>
             <div class="modal-footer">
