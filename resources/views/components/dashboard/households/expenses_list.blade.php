@@ -41,7 +41,12 @@
                 <tbody>
                     @foreach ($expenses as $expense)
                         <tr class="cursor-pointer expense_row" data-expense-id = "{{ $expense->id }}">
-                            <th scope="row">{{ $expense->name }}</th>
+                            <th scope="row">
+                                {{ $expense->name }}
+                                @if ($expense->ocurrance != "one_time")
+                                    <i class="text-muted fas fa-redo-alt"></i>
+                                @endif
+                            </th>
                             <td>
                                 @money($expense->amount * 100, $household->currency->currency_short)
                             </td>

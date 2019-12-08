@@ -12,6 +12,12 @@ class ExpensesController extends Controller
         $this->middleware('auth');
     }
 
+    // How ocurrances will work
+    // Each day, a function would be called, that would check:
+    // 1. Get daily expenses and apply them to the budget
+    // 2. Get all expenses ...
+    // 3. Get all expenses made on Nth day in the month (the current day) and see if they are monthly and apply them
+
     public function fetchExpense(Request $request, $id){
         $expense = \App\Expense::findOrFail($id);
         if($expense != null && Gate::allows('view-expense', $expense->household)){
@@ -38,6 +44,7 @@ class ExpensesController extends Controller
     public function store(Request $request)
     {
         $validation = [
+            'ocurrance' => 'required|string|in:one_time,daily,weekly,monthly,yearly',
             'name' => 'required|string|max:191',
             'amount' => 'required|numeric|min:1',
             'category_id' => 'required|integer|min:1',
@@ -55,11 +62,8 @@ class ExpensesController extends Controller
             $expense->category_id = $request->input('category_id');
             $expense->name = $request->input('name');
             $expense->amount = $request->input('amount');
-            $expense->created_at = date("Y-m-d H:i:s");
+            $expense->ocurrance = $request->input('ocurrance');
             $expense->save();
-
-            // $household->current_state -= $expense->amount;
-            // $household->save();
 
             toastr()->success('Expenses added');
             return redirect()->back();

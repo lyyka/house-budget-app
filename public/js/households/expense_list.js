@@ -51,5 +51,22 @@ function loadUpModal(expense, category){
     $("#exp_category_name").text(category_name);
     $("#del_expense_form").attr('action', '/expenses/' + expense.id);
 
+    if(expense.ocurrance != "one_time"){
+        ocurrances = {
+            "daily": "Each day",
+            "weekly": "Each week",
+            "monthly": "Each month",
+            "yearly": "Each year"
+        };
+        ocurrance_par = $("<p></p>");
+        ocurrance_par_header = $("<strong></strong>");
+        ocurrance_par_header.text("Ocurrs: ");
+        ocurrance_par_text = $("<span></span>");
+        ocurrance_par_text.text(ocurrances[expense.ocurrance]);
+        ocurrance_par.append(ocurrance_par_header);
+        ocurrance_par.append(ocurrance_par_text);
+        $("#expense_show_modal_body").prepend(ocurrance_par)
+    }
+
     $("#expenseShowModal").modal('show');
 }

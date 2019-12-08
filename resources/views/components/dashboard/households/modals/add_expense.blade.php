@@ -11,9 +11,24 @@
             <div class="modal-body">
                 @csrf
                 <input type="hidden" name="household_id" value = {{ $household->id }} />
+
+                <div class = "mb-4">
+                    <label for="ocurrance" class="d-block">Ocurrance:</label>
+                    <select name="ocurrance" id="ocurrance" class="w-100 rounded shadow-sm border py-2 px-3">
+                        <option value="one_time">One time</option>
+                        <option value="daily">Every day</option>
+                        <option value="weekly">Every week</option>
+                        <option value="monthly">Every month</option>
+                        <option value="yearly">Every year</option>
+                    </select>
+                    @error('ocurrance')
+                        <label class = "d-block text-danger">{{ $message }}</label>
+                    @enderror
+                </div>
+
                 <div class="mb-4">
                     <label for="name" class="d-block">Expense title:</label>
-                    <input id="name" type="text" class="w-100 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required autofocus placeholder="Describe the expense" value = "{{ old('name') }}" />
+                    <input id="name" type="text" class="w-100 rounded shadow-sm border py-2 px-3 @error('name') is-invalid @enderror" name="name" required placeholder="Describe the expense" value = "{{ old('name') }}" />
                     @error('name')
                         <label class = "d-block text-danger">{{ $message }}</label>
                     @enderror
@@ -21,7 +36,7 @@
         
                 <div class="mb-4">
                     <label for="amount" class="d-block">Amount:</label>
-                    <input id="amount" type="number" min="1" class="w-100 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required autofocus placeholder="How much did you spend?" value = "{{ old('amount') }}" />
+                    <input id="amount" type="number" min="1" class="w-100 rounded shadow-sm border py-2 px-3 @error('amount') is-invalid @enderror" name="amount" required placeholder="How much did you spend?" value = "{{ old('amount') }}" />
                     <label class="text-muted">{{ $household->currency->currency_short }}</label>
                     @error('amount')
                         <label class = "d-block text-danger">{{ $message }}</label>

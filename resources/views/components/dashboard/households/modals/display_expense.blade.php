@@ -7,7 +7,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id = "expense_show_modal_body">
             <p>
                 <strong>Amount:</strong>
                 <span id="exp_amount"></span>
