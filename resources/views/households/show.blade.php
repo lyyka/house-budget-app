@@ -105,7 +105,7 @@
         @can('delete-household', $household)
             {{-- destroy household --}}
             <div class="text-center mb-5">
-                <button type="button" class="border rounded shadow-sm bg-light text-dark p-2" data-toggle="modal" data-target="#destroyHouseholdModal">
+                <button type="button" class="border-0 text-muted bg-transparent text-dark p-2" data-toggle="modal" data-target="#destroyHouseholdModal">
                     Delete this household
                 </button>
             </div>

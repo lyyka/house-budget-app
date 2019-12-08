@@ -72,17 +72,6 @@ class HouseholdSharingController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -114,7 +103,7 @@ class HouseholdSharingController extends Controller
     public function destroy($id)
     {
         $share = \App\HouseholdShare::findOrFail($id);
-        if($share != null && Gate::allows('share-household', $household)){
+        if($share != null && Gate::allows('share-household', $share->household)){
             $email = $share->shared_with_email;
             $share->delete();
             toastr()->success("Acces revoked for " . $email);

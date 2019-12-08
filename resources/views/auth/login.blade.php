@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.auth_pages')
 
 @section('content')
 <div class="container my-5 py-5">
@@ -14,7 +14,7 @@
                     
                     <div class="mb-4">
                         <label for="email" class="d-block">Email:</label>
-                        <input id="email" type="email" class="w-100 rounded shadow-sm border py-2 px-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter your email address" />
+                        <input id="email" type="email" class="w-100 rounded shadow-sm border py-2 px-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Enter your email address" />
                         @error('email')
                             <label class = "d-block text-danger">{{ $message }}</label>
                         @enderror

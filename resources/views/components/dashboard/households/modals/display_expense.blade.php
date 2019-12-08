@@ -10,11 +10,11 @@
         <div class="modal-body" id = "expense_show_modal_body">
             <p>
                 <strong>Amount:</strong>
+                {{ $household->currency->char }}
                 <span id="exp_amount"></span>
-                {{ $household->currency->currency_short }}
             </p>
             <p>
-                <strong>Expense Made At:</strong>
+                <strong>Made At:</strong>
                 <span id="exp_made_at"></span>
             </p>
             <strong>Category:</strong>

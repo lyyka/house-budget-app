@@ -15,7 +15,7 @@ function fetchExpensesByCategoryData(household_id){
     if(household_id > 0){
         const req = $.ajax({
             type: "GET",
-            url: '/households/' + household_id + '/expenses_by_category',
+            url: '/charts/' + household_id + '/expenses_by_category',
             async: true,
             cache: false,
         });

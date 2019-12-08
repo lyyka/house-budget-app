@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Household;
 use Auth;
@@ -13,151 +12,6 @@ class HouseholdsController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
-    }
-
-    // EXPENSES LIST BACK AND FORTH WITH THE MONTHS
-    public function resetExpensesList(Request $request){
-        Session::forget('expense_list_view_year');
-        Session::forget('expense_list_view_month');
-
-        return redirect()->back();
-    }
-
-    // changes session variables for expenses list
-    public function goThroughTimeForExpensesList($household, $interval){
-        if(Gate::allows('view-charts', $household)){
-            if(!Session::has('expense_list_view_year') &&
-            !Session::has('expense_list_view_month')){
-                Session::put('expense_list_view_year', date("Y"));
-                Session::put('expense_list_view_month', date("m"));
-            }
-
-            $current_view_month = Session::get('expense_list_view_month');
-            $current_view_year = Session::get('expense_list_view_year');
-
-            $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
-            $modified = $datetime->modify($interval);
-
-            Session::put('expense_list_view_month', $modified->format('m'));
-            Session::put('expense_list_view_year', $modified->format('Y'));
-        }
-    }
-
-    // gets expenses from previous month (previous month from one stored in session)
-    public function loadExpensesFromPreviousMonth(Request $request, $id){
-        $household = \App\Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-            $this->goThroughTimeForExpensesList($household, "-1 months");
-
-            return redirect()->back();
-        }
-        else{
-            return redirect()->back()->with('error', 'Access denied');
-        }
-    }
-
-    // gets expenses from next month (next month from one stored in session)
-    public function loadExpensesFromNextMonth(Request $request, $id){
-        $household = \App\Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-            $this->goThroughTimeForExpensesList($household, "+1 months");
-
-            return redirect()->back();
-        }
-        else{
-            return redirect()->back()->with('error', 'Access denied');
-        }
-    }
-    
-    // return expenses grouped by category
-    public function getExpensesByCategory(Request $request, $id){
-        $household = Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-
-            $expenses = $household->fetchExpensesByCategory(null, date('m'), date('Y'));
-
-            return response()->json([
-                'success' => true,
-                'expenses' => $expenses
-            ]);
-        }
-        else{
-            return response()->json(['success' => false]);
-        }
-    }
-
-    // returns custom data range (by default returns this week only)
-    public function getCustomDataRange(Request $request, $id){
-        $household = Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-
-            $query_start_date = $request->query('start');
-            $query_end_date = $request->query('end');
-            $expenses = $household->fetchDataRange($query_start_date, $query_end_date);
-
-            return response()->json([
-                'success' => true,
-                'expenses' => $expenses
-            ]);
-        }
-        else{
-            return response()->json(['success' => false]);
-        }
-    }
-
-    /**
-     * Get todays stats for the chart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response JSON
-     */
-    public function getDailyDataByHour(Request $request, $id, $day = null){
-        $household = Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-
-            $display_day = date('d');
-            $display_month = date('m');
-            $display_year = date('Y');
-            if($day != null){
-                $carbon = \Carbon\Carbon::parse($day);
-                $display_day = $carbon->format('d');
-                $display_month = $carbon->format('m');
-                $display_year = $carbon->format('Y');
-            }
-            $expenses = $household->fetchDayExpenses($display_day, $display_month, $display_year);
-
-            return response()->json([
-                'success' => true,
-                'expenses' => $expenses
-            ]);
-        }
-        else{
-            return response()->json(['success' => false]);
-        }
-    }
-
-    /**
-     * Get monthly stats for the chart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response JSON
-     */
-    public function getMonthlyData(Request $request, $id, $year){
-        $household = Household::findOrFail($id);
-        if($household != null && Gate::allows('view-charts', $household)){
-
-            $expenses = $household->fetchMonthlyExpenses($year);
-
-            return response()->json([
-                'success' => true,
-                'expenses' => $expenses
-            ]);
-        }
-        else{
-            return response()->json(['success' => false]);
-        }
     }
 
     /**
@@ -302,17 +156,6 @@ class HouseholdsController extends Controller
             toastr()->error('This is not your household');
             return redirect('/households');
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

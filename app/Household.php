@@ -15,26 +15,37 @@ class Household extends Model
     // Timestamps
     public $timestamps = true;
 
+    // Get all records which include this household as shared
     public function getShares(){
         return $this->hasMany('App\HouseholdShare');
     }
 
+    // Check if this household is shared to anyone or not
+    public function isShared(){
+        return count($this->getShares()) > 0;
+    }
+
+    // get the App\User as a owner of household
     public function owner(){
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    // get App\Expense Collection of expenses for household
     public function expenses(){
         return $this->hasMany('App\Expense');
     }
 
+    // get App\HouseholdMember Collection of memebers that belong to this household
     public function members(){
         return $this->hasMany('App\HouseholdMember');
     }
 
+    // get App\Currency as active currency on this household
     public function currency(){
         return $this->belongsTo('App\Currency', 'currency_id');
     }
 
+    // calculate total income based on households monthly income + additional income of all it's members
     public function getTotalIncome(){
         $members = $this->members;
         $monthly_income = $this->monthly_income;
@@ -44,7 +55,7 @@ class Household extends Model
         return $monthly_income;
     }
 
-    // just gets all the expenses in a given range WITHOUT ANY GROUPING
+    // Gets all expenses for a specific date without any grouping
     public function fetchExpenses($day = null, $month = null, $year = null){
         $expenses = $this->expenses();
         if($day != null){
@@ -59,7 +70,7 @@ class Household extends Model
         return $expenses;
     }
 
-    // gets expenses BY HOUR in a given day in a given month in a given year
+    // Groups expenses by HOUR on a given date
     public function fetchDayExpenses($day, $month, $year){
         return DB::table('expenses')
         ->select(DB::raw('sum(amount) as total'), DB::raw('HOUR(created_at) as hour'))
@@ -72,7 +83,7 @@ class Household extends Model
         ->get();
     }
 
-    // gets expenses BY MONTH in given YEAR
+    // Groups expenses by month in a given year
     public function fetchMonthlyExpenses($year){
         return DB::table('expenses')
         ->select(DB::raw('sum(amount) as total'), DB::raw('MONTH(created_at) as month'))
@@ -83,7 +94,7 @@ class Household extends Model
         ->get();
     }
 
-    // gets expenses by each category in a GIVEN DAY in a GIVEN MONTH in a GIVEN YEAR
+    // Groups expenses by categories on a given date (can be only day, month or year)
     public function fetchExpensesByCategory($day = null, $month = null, $year = null){
         $expenses = DB::table('expenses')
         ->select(DB::raw('sum(amount) as total'), 'category_id', 'expense_categories.name as category_name', 'expense_categories.hex_color as category_color')
@@ -104,7 +115,7 @@ class Household extends Model
         return $expenses;
     }
 
-    // fetches data in defined range (by default fetches the current week)
+    // fetches data in defined custom date range (by default fetches the current week)
     public function fetchDataRange($range_start_date, $range_end_date){
         $end_date = $range_end_date == null ? date("Y-m-d") : $range_end_date;
         $start_date = $range_start_date == null ? \Carbon\Carbon::parse($end_date)->startOfWeek()->subDays(1) : $range_start_date;

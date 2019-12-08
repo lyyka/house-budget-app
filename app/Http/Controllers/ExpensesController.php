@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Session;
 
 class ExpensesController extends Controller
 {
@@ -12,12 +13,87 @@ class ExpensesController extends Controller
         $this->middleware('auth');
     }
 
-    // How ocurrances will work
-    // Each day, a function would be called, that would check:
-    // 1. Get daily expenses and apply them to the budget
-    // 2. Get all expenses ...
-    // 3. Get all expenses made on Nth day in the month (the current day) and see if they are monthly and apply them
+    /*
+     * Based on current session data adds or decreases current viewing month by $interval
+     *
+     * @param  \App\Household  $household
+     * @param  String $interval
+     * @return \Illuminate\Http\Response
+     */
+    private function goThroughTimeForExpensesList($household, $interval){
+        if(Gate::allows('view-charts', $household)){
+            if(!Session::has('expense_list_view_year') &&
+            !Session::has('expense_list_view_month')){
+                Session::put('expense_list_view_year', date("Y"));
+                Session::put('expense_list_view_month', date("m"));
+            }
 
+            $current_view_month = Session::get('expense_list_view_month');
+            $current_view_year = Session::get('expense_list_view_year');
+
+            $datetime = new \DateTime($current_view_year . '-' . $current_view_month);
+            $modified = $datetime->modify($interval);
+
+            Session::put('expense_list_view_month', $modified->format('m'));
+            Session::put('expense_list_view_year', $modified->format('Y'));
+        }
+    }
+
+    /**
+     * Load expenses from previous month. Base on current viewing month from session sets the previous month data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function loadExpensesFromPreviousMonth(Request $request, $id){
+        $household = \App\Household::findOrFail($id);
+        if($household != null && Gate::allows('view-charts', $household)){
+            $this->goThroughTimeForExpensesList($household, "-1 months");
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back()->with('error', 'Access denied');
+        }
+    }
+
+    /**
+     * Load expenses from next month. Base on current viewing month from session sets the next month data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function loadExpensesFromNextMonth(Request $request, $id){
+        $household = \App\Household::findOrFail($id);
+        if($household != null && Gate::allows('view-charts', $household)){
+            $this->goThroughTimeForExpensesList($household, "+1 months");
+            return redirect()->back();
+        }
+        else{
+            return redirect()->back()->with('error', 'Access denied');
+        }
+    }
+
+    /**
+     * Resets expenses list session variables to current month.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function resetExpensesList(Request $request){
+        Session::forget('expense_list_view_year');
+        Session::forget('expense_list_view_month');
+        return redirect()->back();
+    }
+
+    /**
+     * Return expense data as JSON response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function fetchExpense(Request $request, $id){
         $expense = \App\Expense::findOrFail($id);
         if($expense != null && Gate::allows('view-expense', $expense->household)){
@@ -79,17 +155,6 @@ class ExpensesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -100,12 +165,7 @@ class ExpensesController extends Controller
         $expense = \App\Expense::findOrFail($id);
         if($expense != null & Gate::allows('delete-expense', $expense->household)){
             if(Auth::user()->hasVerifiedEmail()){
-                // if(date("m", strtotime($expense->created_at)) == date("m")){
-                //     $expense->household->current_state += $expense->amount;
-                //     $expense->household->save();
-                // }
                 $expense->delete();
-
                 toastr()->success('Expense removed');
             }
             else{

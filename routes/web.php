@@ -11,7 +11,7 @@
 |
 */
 
-// index page
+// regular pages
 Route::get('/', 'PagesController@index')->name('pages.index');
 
 // auth
@@ -24,33 +24,37 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('users', 'UsersController', [
     'only' => ['edit', 'update', 'destroy']
 ]);
-Route::post('/users/{id}/password/new', 'UsersController@resetPassword');
+Route::post('/users/{user_id}/password/new', 'UsersController@resetPassword');
 
 // households
 Route::resource('households', 'HouseholdsController');
+
 // households sharing
-Route::post('/households/{id}/share', 'HouseholdSharingController@store');
-Route::delete('/share/{id}/revoke', 'HouseholdSharingController@destroy');
+Route::post('/households/{household_id}/share', 'HouseholdSharingController@store');
+Route::delete('/share/{share_id}/revoke', 'HouseholdSharingController@destroy');
+Route::get('/share/{share_id}/edit', 'HouseholdSharingController@edit');
+Route::get('/share/{share_id}/update', 'HouseholdSharingController@update');
+
 // chart data collection
-Route::get('/households/{id}/{year}/monthly_data', 'HouseholdsController@getMonthlyData')->name('household.monthly');
-Route::get('/households/{id}/daily_data_by_hour/{day?}', 'HouseholdsController@getDailyDataByHour')->name('household.dailyByHour');
-Route::get('/households/{id}/custom_range', 'HouseholdsController@getCustomDataRange')->name('household.customRange');
-Route::get('/households/{id}/expenses_by_category', 'HouseholdsController@getExpensesByCategory')->name('household.byCategory');
+Route::get('/charts/{household_id}/{year}/monthly_data', 'ChartDataController@getMonthlyData')->name('household.monthly');
+Route::get('/charts/{household_id}/daily_data_by_hour/{day?}', 'ChartDataController@getDailyDataByHour')->name('household.dailyByHour');
+Route::get('/charts/{household_id}/custom_range', 'ChartDataController@getCustomDataRange')->name('household.customRange');
+Route::get('/charts/{household_id}/expenses_by_category', 'ChartDataController@getExpensesByCategory')->name('household.byCategory');
 // go back and through expenses list by month
-Route::get('/households/{id}/expenses/next_month', 'HouseholdsController@loadExpensesFromNextMonth');
-Route::get('/households/{id}/expenses/prev_month', 'HouseholdsController@loadExpensesFromPreviousMonth');
-Route::get('/households/expenses/reset_expenses_list', 'HouseholdsController@resetExpensesList');
+Route::get('/expenses/{household_id}/next_month', 'ExpensesController@loadExpensesFromNextMonth');
+Route::get('/expenses/{household_id}/prev_month', 'ExpensesController@loadExpensesFromPreviousMonth');
+Route::get('/expenses/reset_expenses_list', 'ExpensesController@resetExpensesList');
 
 // expenses
 Route::resource('expenses', 'ExpensesController', [
     'only' => ['store', 'show', 'destroy']
 ]);
-Route::get('/expenses/{id}/getData', 'ExpensesController@fetchExpense');
+Route::get('/expenses/{expense_id}/getData', 'ExpensesController@fetchExpense');
 
 // excel exports/imports
 Route::post('/excel/export', 'ExcelController@export')->name('excel.export');
 Route::post('/excel/import', 'ExcelController@import')->name('excel.import');
-Route::get('/excel/download/{id}', 'ExcelController@download')->name('excel.download');
+Route::get('/excel/download/{download_id}', 'ExcelController@download')->name('excel.download');
 
 // members
 Route::resource('members', 'MembersController', [

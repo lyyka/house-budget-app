@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="container">
+    <div class="container rounded shadow-sm border p-4 bg-white">
         <h3>Add a Household</h3>
         <hr />
         <form method="POST" action="/households">

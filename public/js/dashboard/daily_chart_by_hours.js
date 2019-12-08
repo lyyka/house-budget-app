@@ -20,7 +20,7 @@ function dailyDropdownChange(){
 
 function fetchDailyData(household_id){
     if(household_id > 0){
-        let url = '/households/' + household_id + '/daily_data_by_hour';
+        let url = '/charts/' + household_id + '/daily_data_by_hour';
         if(daily_chart_custom_day != undefined){
             url += '/' + daily_chart_custom_day;
         }

@@ -31,21 +31,24 @@
                     <p class="mb-1">
                         <strong>{{ $share->shared_with_email }}</strong>
                     </p>
-                    <form action="/share/{{ $share->id }}/revoke" method="POST" class="mb-2">
-                        @csrf
-                        @method("DELETE")
-                        <button type="submit" class="border-0 p-0 bg-transparent text-info">
-                            Revoke access
-                        </button>
-                    </form>
+                    <div class="mb-2">
+                        <a href="/share/{{ $share->id }}/edit" class="text-info d-inline-block pr-1 border-right">
+                            Edit permissions
+                        </a>
+                        <form action="/share/{{ $share->id }}/revoke" method="POST" class="pl-1 d-inline-block">
+                            @csrf
+                            @method("DELETE")
+                            <button type="submit" class="border-0 p-0 bg-transparent text-danger">
+                                Revoke access
+                            </button>
+                        </form>
+                    </div>
                     <p class="mb-1">
                         <span class="text-success">
                             <i class="fas fa-check-circle"></i>
                         </span>
                         <span class="text-muted">
-                            @foreach ($allowed as $allow)
-                                {{ $allow }},
-                            @endforeach
+                            {{ implode($allowed, ", ") }}
                         </span>
                     </span>
                     <p>
@@ -53,12 +56,12 @@
                             <i class="fas fa-times-circle"></i>
                         </span>
                         <span class="text-muted">
-                            @foreach ($disabled as $disable)
-                                {{ $disable }},
-                            @endforeach
+                            {{ implode($disabled, ", ") }}
                         </span>
                     </p>
-                    <hr />
+                    @if (count($shared_with) > 1)
+                        <hr />                    
+                    @endif
                 @endforeach
             </div>
             <div class="modal-footer">
